@@ -1,6 +1,6 @@
 # mlops_group_20
 
-machine learning operations assignments s
+machine learning operations assignment
 
 ## Project structure
 
