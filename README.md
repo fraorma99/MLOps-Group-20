@@ -103,9 +103,19 @@ uv sync
 ```
 ./scripts/download_data.sh
 ```
-**3. process data**
+**3. Process data**
 ```
 uv run python src/mlops_group_20/data.py \
   data/raw/language_detection.csv \
   data/processed/
 ```
+
+**4. Train the model on the kaggle data**
+```
+uv run python src/mlops_group_20/train.py
+```
+**5. Evaluate the model on the testing**
+```
+uv run python src/mlops_group_20/evaluate.py
+```
+
