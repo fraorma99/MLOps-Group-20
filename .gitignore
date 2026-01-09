@@ -178,5 +178,4 @@ cython_debug/
 code .gitignore  # Edit → paste at bottom:
 # Data (large files)
 data/
-models/
 reports/figures/*.png
