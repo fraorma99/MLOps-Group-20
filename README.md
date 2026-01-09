@@ -1,7 +1,7 @@
 # Project Description
 
 **1. Overall Goal of the Project**
-The primary objective of this project is to develop and deploy a robust, scalable, and fully automated MLOps pipeline for Language Detection. Our goal is to implement a complete lifecycle management system—from data versioning and model training to containerized deployment and follow what have been taught in the DTU MLOps course. We aim to provide an API where users can submit text fragments and receive the predicted language with high confidence.
+The primary objective of this project is to develop and deploy a robust, scalable, and fully automated MLOps pipeline for Language Detection. Our goal is to implement a complete lifecycle management system, from data versioning and model training to containerized deployment and follow what have been taught in the DTU MLOps course. We aim to provide an API where users can submit text fragments and receive the predicted language with high confidence.
 
 **2. Frameworks**
 We will integrate these key frameworks:
