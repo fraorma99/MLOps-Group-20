@@ -112,7 +112,7 @@ uv run python src/mlops_group_20/data.py \
 
 **4. Train the model on the kaggle data**
 ```
-uv run python src/mlops_group_20/train.py
+uv run python -m mlops_group_20.train
 ```
 **5. Evaluate the model on the testing**
 ```
