@@ -123,9 +123,3 @@ uv run python src/mlops_group_20/evaluate.py
 ```
 uv run python src/mlops_group_20/visualize.py
 ```
-
-**6. Visualize performance**
-
-```
-uv run python src/mlops_group_20/visualize.py
-```
