@@ -5,6 +5,7 @@
 The primary objective of this project is to develop and deploy a robust, scalable, and fully automated MLOps pipeline for Language Detection. Our goal is to implement a complete lifecycle management system, from data versioning and model training to containerized deployment and follow what have been taught in the MLOps course. We aim to provide an API where users can submit text fragments and receive the predicted language with high confidence.
 
 **2. Frameworks**
+
 We will integrate these key frameworks:
 *PyTorch / PyTorch Lightning:* We will use PyTorch for the core modeling. PyTorch Lightning will be integrated to standardize the training loop, making it easier to handle device placement (CPU/GPU).
 
@@ -17,6 +18,7 @@ We will integrate these key frameworks:
 *FastAPI:* This will be our web framework to serve the model as a REST API, integrated within the api.py module.
 
 **3. Data**
+
 We will use the "Language Detection" dataset available on Kaggle. 
 
 https://www.kaggle.com/datasets/basilb2s/language-detection
