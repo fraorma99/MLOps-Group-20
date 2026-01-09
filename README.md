@@ -95,12 +95,13 @@ git clone https://github.com/fraorma99/MLOps-Group-20.git
 cd MLOps-Group-20
 ```
 **1. Install dependencies**
+
 ./scripts/setup.sh
 
-**Download dataset**
+**2. Download dataset**
 ./scripts/download_data.sh
 
-**process data**
+**3. process data**
 uv run python src/mlops_group_20/data.py \
   data/raw/language_detection.csv \
   data/processed/
