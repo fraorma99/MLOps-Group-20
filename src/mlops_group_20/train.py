@@ -5,8 +5,8 @@ from collections import Counter
 import pandas as pd
 import numpy as np
 
-from mlops_group_20.model import LanguageClassifier
-from mlops_group_20.data import LanguageDataset
+from .model import LanguageClassifier
+from .data import LanguageDataset
 
 import torch
 import torch.nn as nn
