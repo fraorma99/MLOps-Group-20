@@ -112,11 +112,11 @@ def evaluate():
     plt.xticks(rotation=45)
     plt.yticks(rotation=0)
     plt.tight_layout()
-    plt.savefig(Path('report/figures') / 'confusion_matrix.png', dpi=300, bbox_inches='tight')
+    plt.savefig(Path('reports/figures/confusion_matrix.png'), dpi=300, bbox_inches='tight')
     
     #plt.show()
     plt.close()
-    print("✓ Confusion matrix saved: report/figures/confusion_matrix.png")
+    print("✓ Confusion matrix saved: reports/figures/confusion_matrix.png")
     
     # Per-language accuracy
     lang_acc = {}
