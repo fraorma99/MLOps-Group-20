@@ -3,7 +3,7 @@ from pathlib import Path
 from collections import Counter
 
 import pandas as pd
-
+import numpy as np
 
 from mlops_group_20.model import LanguageClassifier
 from mlops_group_20.data import LanguageDataset
@@ -170,12 +170,18 @@ def train():
     num_epochs = 10
     best_val_loss = float('inf')
     
+    train_losses, val_losses = [], []
+    train_accs, val_accs = [], []
+
+
     for epoch in range(num_epochs):
         # Training phase
         model.train()
         train_loss = 0
         train_correct = 0
         train_total = 0
+
+
         
         for texts, labels in train_loader:
             texts, labels = texts.to(device), labels.to(device)
@@ -215,6 +221,11 @@ def train():
         avg_val_loss = val_loss / len(val_loader)
         
         scheduler.step(avg_val_loss)
+
+        train_losses.append(avg_train_loss)
+        val_losses.append(avg_val_loss)
+        train_accs.append(train_acc)
+        val_accs.append(val_acc)
         
         print(f"Epoch {epoch+1}/{num_epochs}: Train Loss: {avg_train_loss:.4f}, Train Acc: {train_acc:.2f}% | Val Loss: {avg_val_loss:.4f}, Val Acc: {val_acc:.2f}%")
         
@@ -236,6 +247,17 @@ def train():
     print("\nTraining complete!")
     print(f"Best validation accuracy: {val_acc:.2f}%")
 
+    #save training history
+    torch.save({
+        'epochs': list(range(1, num_epochs + 1)),
+        'train_losses': train_losses,
+        'val_losses': val_losses,
+        'train_accs': train_accs,
+        'val_accs': val_accs,
+        'final_train_acc': train_accs[-1],
+        'final_val_acc': val_accs[-1],
+        'best_val_epoch': np.argmin(val_losses) + 1
+    }, "models/training_history.pt")
 
 if __name__ == "__main__":
     train()
