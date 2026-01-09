@@ -96,6 +96,7 @@ cd MLOps-Group-20
 ```
 **1. Install dependencies**
 ```
+uv sync
 ./scripts/setup.sh
 ```
 **2. Download dataset**
