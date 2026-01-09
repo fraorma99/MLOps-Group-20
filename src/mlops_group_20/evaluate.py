@@ -74,7 +74,7 @@ def evaluate():
     )
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=64)
     
-    # Load best model
+    #Loads the best model found during the training stage in train.py
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     checkpoint = torch.load("models/best_model.pt", map_location=device)
     
@@ -112,7 +112,7 @@ def evaluate():
     plt.xticks(rotation=45)
     plt.yticks(rotation=0)
     plt.tight_layout()
-    plt.savefig('report/figures/confusion_matrix.png', dpi=300, bbox_inches='tight')
+    plt.savefig(Path('report/figures') / 'confusion_matrix.png', dpi=300, bbox_inches='tight')
     
     #plt.show()
     plt.close()
