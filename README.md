@@ -16,7 +16,7 @@ We will integrate these key frameworks:
 *FastAPI:* This will be our web framework to serve the model as a REST API, integrated within the api.py module.
 
 **3. Data**
-We will initially use the "Language Detection" dataset available on Kaggle. 
+We will use the "Language Detection" dataset available on Kaggle. 
 
 https://www.kaggle.com/datasets/basilb2s/language-detection
 
