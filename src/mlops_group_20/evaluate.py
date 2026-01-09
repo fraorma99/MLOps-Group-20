@@ -7,7 +7,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 from mlops_group_20.model import LanguageClassifier
-
+from mlops_group_20.train import simple_tokenizer, TextDataset  # Copy classes/functions
 from collections import Counter
 
 class Vocabulary:
@@ -64,7 +64,7 @@ def evaluate():
     test_data = data.iloc[split_info['test_idx']].reset_index(drop=True)
     test_labels = [label2idx[lang] for lang in test_data['Language']]
     
-    from train import simple_tokenizer, TextDataset  # Copy classes/functions
+
     tokenizer = simple_tokenizer
     
     test_dataset = TextDataset(

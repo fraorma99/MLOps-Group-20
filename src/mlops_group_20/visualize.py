@@ -1,8 +1,10 @@
 import torch
 import matplotlib.pyplot as plt
-
-history = torch.load("models/training_history.pt")
+import numpy as np
+torch.serialization.add_safe_globals([np.ndarray])  # Safe for your use
+history = torch.load("models/training_history.pt", weights_only=False)
 epochs = history['epochs']
+
 
 plt.figure(figsize=(15, 5))
 
@@ -24,5 +26,5 @@ plt.title('Final Performance')
 plt.ylabel('Accuracy %')
 
 plt.tight_layout()
-plt.savefig('report/figures/training_curves.png', dpi=300, bbox_inches='tight')
+plt.savefig('reports/figures/training_curves.png', dpi=300, bbox_inches='tight')
 plt.show()
