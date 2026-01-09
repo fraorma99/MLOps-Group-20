@@ -114,6 +114,13 @@ uv run python src/mlops_group_20/data.py \
 ```
 uv run python -m mlops_group_20.train
 ```
+
+In case the system doesn't find mlops_group_20, just install the "Editable" mode:
+```
+uv pip install -e .
+```
+then run the train again.
+
 **5. Evaluate the model on the testing**
 ```
 uv run python src/mlops_group_20/evaluate.py
