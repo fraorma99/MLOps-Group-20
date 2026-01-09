@@ -118,4 +118,9 @@ uv run python -m mlops_group_20.train
 ```
 uv run python src/mlops_group_20/evaluate.py
 ```
+**6. Visualize performance**
+
+```
+uv run python src/mlops_group_20/visualize.py
+```
 
