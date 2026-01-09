@@ -93,7 +93,7 @@ started with Machine Learning Operations (MLOps).
 ```bash
 git clone https://github.com/fraorma99/MLOps-Group-20.git
 cd MLOps-Group-20
-
+```
 **1. Install dependencies**
 ./scripts/setup.sh
 
