@@ -5,13 +5,13 @@ The primary objective of this project is to develop and deploy a robust, scalabl
 
 **2. Frameworks**
 We will integrate these key frameworks:
-*PyTorch / PyTorch Lightning:* We will use PyTorch for the core modeling. PyTorch Lightning will be integrated to standardize the training loop, making it easier to handle device placement (CPU/GPU) and logging without boilerplate code.
+*PyTorch / PyTorch Lightning:* We will use PyTorch for the core modeling. PyTorch Lightning will be integrated to standardize the training loop, making it easier to handle device placement (CPU/GPU).
 
-*Hydra:* For configuration management. We will use Hydra to manage hyperparameters, data paths, and model settings, allowing us to run different experiments without modifying the source code.
+*Hydra:* For configuration management. We will use Hydra to manage hyperparameters, data paths, and model settings, allowing to run different experiments without modifying the source code.
 
-*DVC (Data Version Control):* To manage our datasets. Since GitHub is not designed for large files, DVC will allow us to version our data and models, ensuring reproducibility across the 5-member team.
+*DVC (Data Version Control):* To manage our datasets. Since GitHub is not designed for large files, DVC will allow us to version our data and models, ensuring reproducibility across all team members.
 
-*Docker:* We will containerize both the training environment and the inference API to ensure "it works on my machine" consistency across our different operating systems (Mac, Windows, Linux).
+*Docker:* We will containerize both the training environment and the inference API to ensure it works on all machines.
 
 *FastAPI:* This will be our web framework to serve the model as a REST API, integrated within the api.py module.
 
@@ -28,7 +28,7 @@ Evolution: As the project progresses, we may investigate "data drifting" by intr
 
 **4. Models**
 
-*Baseline Model:* We will start with a straightforward classification model that uses a "Bag-of-Words" approach. This allows us to test our entire MLOps infrastructure (the "pipes" of the project) without getting bogged down in complex AI math on day one.
+*Baseline Model:* We will start with a straightforward classification model that identifies languages by analyzing the frequency and patterns of common words and characters. This approach allows us to establish and test our entire MLOps infrastructure (the "pipes" of the project) without getting bogged down in complex AI architecture on day one.
 
 *Main Model:* When the infrastructure is stable, we could implement a Neural Network specifically designed for text. Instead of just counting words, this model will learn to recognize the "shape" and sequence of sentences.
 
