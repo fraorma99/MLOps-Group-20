@@ -4,22 +4,25 @@ FROM python:3.11-slim
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
+# FORCE uv to use the system python (3.11) and NOT download others
+ENV UV_PYTHON_PREFERENCE=only-system
+
 # Set working directory
 WORKDIR /app
 
 # Copy dependency files
 COPY pyproject.toml uv.lock ./
 
-# Install production dependencies only
-RUN uv sync --frozen --no-dev
+# Install dependencies (but not the project itself yet)
+# This will now correctly use Python 3.11 from the base image
+RUN uv sync --frozen --no-dev --no-install-project
 
 # Copy necessary source code and artifacts
-# We need the source code, the trained model, and the data mappings
 COPY src/ src/
 COPY models/ models/
 COPY data/splits/ data/splits/
 
-# Install the project
+# Install the project locally
 RUN uv pip install -e .
 
 # Expose the port FastAPI will run on
