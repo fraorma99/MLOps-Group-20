@@ -99,28 +99,29 @@ cd MLOps-Group-20
 uv sync
 ./scripts/setup.sh
 ```
-**2. Download dataset**
+**2. Install the package in "editable" mode (-e)**
+```
+uv pip install -e .
+```
+**3. Download dataset**
 ```
 ./scripts/download_data.sh
 ```
-**3. Process data**
+**4. Process data**
 ```
 uv run python src/mlops_group_20/data.py \
   data/raw/language_detection.csv \
   data/processed/
 ```
-
-**4. Train the model on the kaggle data**
+**5. Train the model on the kaggle data**
 ```
 uv run python -m mlops_group_20.train
 ```
-**5. Evaluate the model on the testing**
+**6. Evaluate the model on the testing**
 ```
 uv run python src/mlops_group_20/evaluate.py
 ```
-**6. Visualize performance**
-
+**7. Visualize performance**
 ```
 uv run python src/mlops_group_20/visualize.py
 ```
-
