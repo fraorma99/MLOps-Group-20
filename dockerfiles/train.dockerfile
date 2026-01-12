@@ -1,12 +1,25 @@
-FROM ghcr.io/astral-sh/uv:python3.12-alpine AS base
+# Use a lightweight Python base image
+FROM python:3.11-slim
 
-COPY uv.lock uv.lock
-COPY pyproject.toml pyproject.toml
+# Install uv directly from the official image
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-RUN uv sync --frozen --no-install-project
+# Set the working directory inside the container
+WORKDIR /app
 
-COPY src src/
+# Copy dependency files first to leverage Docker layer caching
+COPY pyproject.toml uv.lock ./
 
-RUN uv sync --frozen
+# Install dependencies without installing the project itself yet
+# This ensures that changing your code doesn't trigger a full reinstall of libraries
+RUN uv sync --frozen --no-dev
 
-ENTRYPOINT ["uv", "run", "src/mlops_group_20/train.py"]
+# Copy the source code and necessary project files
+COPY src/ src/
+COPY data/ data/
+
+# Install the project in editable mode so the 'mlops_group_20' module is recognized
+RUN uv pip install -e .
+
+# Set the default command to run the training script
+ENTRYPOINT ["uv", "run", "python", "-m", "mlops_group_20.train"]
