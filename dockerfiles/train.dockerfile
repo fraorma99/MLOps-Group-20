@@ -1,5 +1,5 @@
 # Use a lightweight Python base image
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # Install uv directly from the official image
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
@@ -7,7 +7,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 # Set environment variable to prefer system Python
 ENV UV_PYTHON_PREFERENCE=only-system
 
-# Set the working directory inside the container
+# Set the working directory inside the container 
 WORKDIR /app
 
 # Copy dependency files first to leverage Docker layer caching

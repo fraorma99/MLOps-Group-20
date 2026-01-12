@@ -1,5 +1,5 @@
 # Use a lightweight Python base image
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
@@ -21,6 +21,8 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY src/ src/
 COPY models/ models/
 COPY data/splits/ data/splits/
+COPY README.md ./
+COPY LICENSE ./
 
 # Install the project locally
 RUN uv pip install -e .
