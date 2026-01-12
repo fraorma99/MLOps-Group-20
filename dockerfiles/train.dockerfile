@@ -20,6 +20,8 @@ RUN uv sync --frozen --no-dev
 # Copy the source code and necessary project files
 COPY src/ src/
 COPY data/ data/
+COPY README.md ./
+COPY LICENSE ./
 
 # Install the project in editable mode so the 'mlops_group_20' module is recognized
 RUN uv pip install -e .
