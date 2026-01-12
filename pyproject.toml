@@ -66,3 +66,9 @@ line-length = 120
 
 [tool.coverage.run]
 omit = ["tests/*"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.uv]
+package = true
