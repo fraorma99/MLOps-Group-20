@@ -15,7 +15,6 @@ __pycache__
 
 # Data and Models (We mount these as volumes or handle them separately)
 data/raw/*
-#data/processed/*
 reports/figures/*
 
 # Local dev configs
