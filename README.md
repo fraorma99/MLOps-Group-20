@@ -132,11 +132,12 @@ uv run python src/mlops_group_20/visualize.py
 ```
 docker build --platform linux/amd64 -f ./dockerfiles/api.dockerfile . -t language_api:latest
 ```
-**2. Start a live container based on that image**
+**2. Start a live container based on that image. If the container name already exists, it delets the old version and creates a new one**
 ```
-docker run --platform linux/amd64 -p 8000:8000 --name api_container language_api:latest
+docker rm -f api_container || true && docker run --rm --platform linux/amd64 -p 8000:8000 --name api_container language_api:latest
 ```
 
 then, verify the connection at http://localhost:8000/docs#/default/root__get
 
+**3. Build the training image**
 
