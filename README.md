@@ -142,8 +142,18 @@ docker build --platform linux/amd64 -f ./dockerfiles/api.dockerfile . -t languag
 ```
 docker rm -f api_container || true && docker run --rm --platform linux/amd64 -p 8000:8000 --name api_container language_api:latest
 ```
-
 then, verify the connection at http://localhost:8000/docs#/default/root__get
+**3. Build training image named language_train**
+```
+docker build --platform linux/amd64 -f ./dockerfiles/train.dockerfile . -t language_train:latest
+```
+**4. Execute the training**
+```
+docker run --rm --platform linux/amd64 \
+  -v $(pwd)/models:/app/models \
+  -v $(pwd)/data:/app/data \
+  --name train_container language_train:latest
+```
+**5. Verify the model performance**
 
-**3. Build the training image**
-
+by using the "predict" tab at  http://localhost:8000/docs#/default/root__get
