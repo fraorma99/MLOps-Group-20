@@ -152,7 +152,6 @@ docker build --platform linux/amd64 -f ./dockerfiles/train.dockerfile . -t langu
 ```
 docker run --rm --platform linux/amd64 \
   -v $(pwd)/models:/app/models \
-  -v $(pwd)/data:/app/data \
   --name train_container language_train:latest
 ```
 **5. Verify the model performance**
