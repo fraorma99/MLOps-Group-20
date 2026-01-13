@@ -157,3 +157,10 @@ docker run --rm --platform linux/amd64 \
 **5. Verify the model performance**
 
 by using the "predict" tab at  http://localhost:8000/docs#/default/root__get
+
+**6. Push to GitHub**
+```
+git add dockerfiles/ .dockerignore .gitignore pyproject.toml uv.lock
+git commit -m "chore: finalize docker setup and local training pipeline (M10)"
+git push origin Fran_V1
+```
