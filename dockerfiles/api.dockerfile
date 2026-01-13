@@ -1,34 +1,33 @@
-# Use a lightweight Python base image
+# Use a Python 3.12 image based on Debian Slim
 FROM python:3.12-slim
 
-# Install uv
+# Install 'uv' by copying the binary from the official image
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-# FORCE uv to use the system python (3.11) and NOT download others
+# Prevent 'uv' from downloading other Python versions and use the system one
 ENV UV_PYTHON_PREFERENCE=only-system
 
-# Set working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy dependency files
+# Copy dependency files first to leverage Docker layer caching
 COPY pyproject.toml uv.lock ./
 
-# Install dependencies (but not the project itself yet)
-# This will now correctly use Python 3.11 from the base image
+# Synchronize dependencies (excluding dev tools) without installing the project yet
 RUN uv sync --frozen --no-dev --no-install-project
 
-# Copy necessary source code and artifacts
+# Copy the source code and necessary artifacts
 COPY src/ src/
 COPY models/ models/
 COPY data/splits/ data/splits/
-COPY README.md ./
-COPY LICENSE ./
+# Metadata files are required for the local package installation
+COPY README.md LICENSE ./ 
 
-# Install the project locally
+# Install the project in editable mode so 'mlops_group_20' is available as a module
 RUN uv pip install -e .
 
-# Expose the port FastAPI will run on
+# Expose the port that FastAPI will use
 EXPOSE 8000
 
-# Command to run the FastAPI server using uvicorn
+# Start the FastAPI server using uvicorn
 ENTRYPOINT ["uv", "run", "uvicorn", "mlops_group_20.api:app", "--host", "0.0.0.0", "--port", "8000"]

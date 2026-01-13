@@ -1,30 +1,31 @@
-# Use a lightweight Python base image
+# Use a Python 3.12 image based on Debian Slim
 FROM python:3.12-slim
 
-# Install uv directly from the official image
+# Install 'uv' from the official image
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-# Set environment variable to prefer system Python
+# Ensure 'uv' uses the system Python
 ENV UV_PYTHON_PREFERENCE=only-system
 
-# Set the working directory inside the container 
+# Set the working directory
 WORKDIR /app
 
-# Copy dependency files first to leverage Docker layer caching
+# Copy dependency files
 COPY pyproject.toml uv.lock ./
 
-# Install dependencies without installing the project itself yet
-# This ensures that changing your code doesn't trigger a full reinstall of libraries
-RUN uv sync --frozen --no-dev
+# Install dependencies (frozen to lockfile)
+RUN uv sync --frozen --no-dev --no-install-project
 
-# Copy the source code and necessary project files
+# Copy source code, data, and metadata
 COPY src/ src/
 COPY data/ data/
-COPY README.md ./
-COPY LICENSE ./
+COPY README.md LICENSE ./ 
 
-# Install the project in editable mode so the 'mlops_group_20' module is recognized
+# Install the local project module
 RUN uv pip install -e .
 
-# Set the default command to run the training script
+# Create the models directory if it doesn't exist to avoid mounting issues
+RUN mkdir -p models
+
+# Execute the training script as the main process
 ENTRYPOINT ["uv", "run", "python", "-m", "mlops_group_20.train"]
