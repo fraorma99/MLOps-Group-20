@@ -1,0 +1,3 @@
+# configs/model/default.yaml
+name: "language_detector"
+hidden_dim: 128
