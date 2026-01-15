@@ -130,8 +130,7 @@ paste your api key from wandb account
 ```
 PYTHONPATH=src uv run python -m mlops_group_20.train \
   wandb.entity={"Write your wandb username"} \
-  wandb.project=mlops_group_20 \
-  training.num_epochs=1
+  wandb.project=mlops_group_20
 ```
 **7. Evaluate the model on the testing**
 ```
