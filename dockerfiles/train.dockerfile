@@ -16,6 +16,9 @@ COPY pyproject.toml uv.lock ./
 # Install dependencies (frozen to lockfile)
 RUN uv sync --frozen --no-dev --no-install-project
 
+# Copy configuration (Required for Hydra - Milestone M11)
+COPY configs/ configs/
+
 # Copy source code, data, and metadata
 COPY src/ src/
 COPY data/ data/
