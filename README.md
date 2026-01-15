@@ -122,7 +122,7 @@ uv run python src/mlops_group_20/data.py \
 
 **5. wandb login**
 ```
-uv run login
+uv run wandb login
 ```
 paste your api key from wandb account
 
