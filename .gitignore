@@ -179,3 +179,17 @@ code .gitignore  # Edit → paste at bottom:
 # Data (large files)
 data/
 reports/figures/*.png
+
+# --- MLOps Specifics ---
+# Ignore all model files (very large)
+models/*.pt
+
+# Ignore all raw and processed data
+data/raw/
+data/processed/
+
+# Ignore local split artifacts
+data/splits/*.pkl
+
+# Ignore all generated figures
+reports/figures/

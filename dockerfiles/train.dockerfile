@@ -1,12 +1,31 @@
-FROM ghcr.io/astral-sh/uv:python3.12-alpine AS base
+# Use a Python 3.12 image based on Debian Slim
+FROM python:3.12-slim
 
-COPY uv.lock uv.lock
-COPY pyproject.toml pyproject.toml
+# Install 'uv' from the official image
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-RUN uv sync --frozen --no-install-project
+# Ensure 'uv' uses the system Python
+ENV UV_PYTHON_PREFERENCE=only-system
 
-COPY src src/
+# Set the working directory
+WORKDIR /app
 
-RUN uv sync --frozen
+# Copy dependency files
+COPY pyproject.toml uv.lock ./
 
-ENTRYPOINT ["uv", "run", "src/mlops_group_20/train.py"]
+# Install dependencies (frozen to lockfile)
+RUN uv sync --frozen --no-dev --no-install-project
+
+# Copy source code, data, and metadata
+COPY src/ src/
+COPY data/ data/
+COPY README.md LICENSE ./ 
+
+# Install the local project module
+RUN uv pip install -e .
+
+# Create the models directory if it doesn't exist to avoid mounting issues
+RUN mkdir -p models
+
+# Execute the training script as the main process
+ENTRYPOINT ["uv", "run", "python", "-m", "mlops_group_20.train"]

@@ -1,0 +1,22 @@
+# Git and GitHub
+.git
+.github
+
+# Python artifacts
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.venv
+.pytest_cache
+
+# OS specific files
+.DS_Store
+
+# Data and Models (We mount these as volumes or handle them separately)
+data/raw/*
+reports/figures/*
+
+# Local dev configs
+.devcontainer
+.vscode

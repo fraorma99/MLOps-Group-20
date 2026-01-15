@@ -66,3 +66,12 @@ line-length = 120
 
 [tool.coverage.run]
 omit = ["tests/*"]
+
+[tool.setuptools]
+packages = ["mlops_group_20"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.uv]
+package = true
