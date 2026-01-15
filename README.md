@@ -161,5 +161,5 @@ by using the "predict" tab at  http://localhost:8000/docs#/default/root__get
 ```
 git add dockerfiles/ .dockerignore .gitignore pyproject.toml uv.lock
 git commit -m "chore: finalize docker setup and local training pipeline (M10)"
-git push origin Fran_V1
+git push origin main
 ```
