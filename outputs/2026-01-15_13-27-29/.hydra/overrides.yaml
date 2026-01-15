@@ -1,0 +1,3 @@
+- wandb.enabled=true
+- wandb.entity=kenzodtu-danmarks-tekniske-universitet-dtu
+- wandb.project=mlops_group_20
