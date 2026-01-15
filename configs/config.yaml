@@ -58,5 +58,10 @@ wandb:
   enabled: true
   project: "mlops_group_20"
   entity: "Group 20"
-  api_key: ${oc.env:WANDB_API_KEY}  # Loads from .env automatically
+  api_key: ${oc.env:WANDB_API_KEY, null} 
+  run_name: null
+  notes: null
+  tags: []
+  watch_model: false
+  log_freq: 100
 

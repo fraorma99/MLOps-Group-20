@@ -1,0 +1,40 @@
+{
+  "os": "macOS-26.2-arm64-arm-64bit",
+  "python": "CPython 3.12.12",
+  "startedAt": "2026-01-15T12:27:29.922886Z",
+  "args": [
+    "wandb.enabled=true",
+    "wandb.entity=kenzodtu-danmarks-tekniske-universitet-dtu",
+    "wandb.project=mlops_group_20"
+  ],
+  "program": "-m mlops_group_20.train",
+  "git": {
+    "remote": "https://github.com/fraorma99/MLOps-Group-20.git",
+    "commit": "b4eeccb36dac0c90cad4c5f8622cd1d78f294ff4"
+  },
+  "email": "s215148@dtu.dk",
+  "root": "/Users/kenzomaetanimachholm/Desktop/DTU/Jan2026/MLOps-Group-20",
+  "host": "kenzos-mbp.students.clients.local",
+  "executable": "/Users/kenzomaetanimachholm/Desktop/DTU/Jan2026/MLOps-Group-20/.venv/bin/python3",
+  "cpu_count": 8,
+  "cpu_count_logical": 8,
+  "disk": {
+    "/": {
+      "total": "494384795648",
+      "used": "390480830464"
+    }
+  },
+  "memory": {
+    "total": "17179869184"
+  },
+  "apple": {
+    "name": "Apple M1",
+    "ecpuCores": 4,
+    "pcpuCores": 4,
+    "gpuCores": 8,
+    "memoryGb": 16,
+    "swapTotalBytes": "2147483648",
+    "ramTotalBytes": "17179869184"
+  },
+  "writerId": "u1qy9081y8hvhs5vsy17xwzbralzhlgf"
+}
