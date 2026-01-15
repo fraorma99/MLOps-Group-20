@@ -120,7 +120,13 @@ uv run python src/mlops_group_20/data.py \
   data/processed/
 ```
 
-**5. Train the model on the kaggle data**
+**5. wandb login**
+```
+uv run login
+```
+paste your api key from wandb account
+
+**6. Train the model on the kaggle data**
 ```
 
 PYTHONPATH=src uv run python -m mlops_group_20.train \
@@ -128,11 +134,11 @@ PYTHONPATH=src uv run python -m mlops_group_20.train \
   wandb.project=mlops_group_20 \
   training.num_epochs=1
 ```
-**6. Evaluate the model on the testing**
+**7. Evaluate the model on the testing**
 ```
 uv run python src/mlops_group_20/evaluate.py
 ```
-**7. Visualize performance**
+**8. Visualize performance**
 ```
 uv run python src/mlops_group_20/visualize.py
 ```
