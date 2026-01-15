@@ -129,7 +129,7 @@ paste your api key from wandb account
 **6. Train the model on the kaggle data**
 ```
 PYTHONPATH=src uv run python -m mlops_group_20.train \
-  wandb.entity={"Write your wandb username"} \
+  wandb.entity=fra-orma99-danmarks-tekniske-universitet-dtu \               
   wandb.project=mlops_group_20
 ```
 **bonus. Evaluate the model on the testing**
