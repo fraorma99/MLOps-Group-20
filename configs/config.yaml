@@ -10,6 +10,6 @@ paths:
   splits_dir: "data/splits/"
   model_save_path: "models/best_model.pt"
 
-  api:
+api:
   host: "0.0.0.0"
   port: 8000
