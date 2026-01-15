@@ -132,11 +132,56 @@ PYTHONPATH=src uv run python -m mlops_group_20.train \
   wandb.entity={"Write your wandb username"} \
   wandb.project=mlops_group_20
 ```
-**7. Evaluate the model on the testing**
+**bonus. Evaluate the model on the testing**
 ```
 uv run python src/mlops_group_20/evaluate.py
 ```
-**8. Visualize performance**
+**bonus. Visualize performance**
 ```
 uv run python src/mlops_group_20/visualize.py
 ```
+
+## Docker
+
+**1. Build a static image named language_api**
+```
+docker build --platform linux/amd64 -f ./dockerfiles/api.dockerfile . -t language_api:latest
+```
+**2. Start a live container based on that image. If the container name already exists, it delets the old version and creates a new one**
+```
+docker rm -f api_container || true && docker run --rm --platform linux/amd64 -p 8000:8000 --name api_container language_api:latest
+```
+then, verify the connection at http://localhost:8000/docs#/default/root__get
+
+**3. Build training image named language_train**
+```
+docker build --platform linux/amd64 -f ./dockerfiles/train.dockerfile . -t language_train:latest
+```
+**4. Execute the training**
+```
+docker run --rm --platform linux/amd64 \
+  -v $(pwd)/models:/app/models \
+  --name train_container language_train:latest
+```
+NOT WORKING!!!
+
+**TEMPORARY SOLUTION**
+```
+docker run --rm --platform linux/amd64 \
+  -v $(pwd)/models:/app/models \
+  --name train_container language_train:latest \
+  wandb.enabled=false \
+  training.num_epochs=10
+```
+
+**5. Verify the model performance**
+
+by using the "predict" tab at  http://localhost:8000/docs#/default/root__get
+
+**6. Push to GitHub**
+```
+git add dockerfiles/ .dockerignore .gitignore pyproject.toml uv.lock
+git commit -m "chore: finalize docker setup and local training pipeline (M10)"
+git push origin main
+```
+
