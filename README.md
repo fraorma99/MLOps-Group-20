@@ -119,17 +119,11 @@ uv run python src/mlops_group_20/data.py \
   data/raw/language_detection.csv \
   data/processed/
 ```
-**5
-
-```
-Change the .env file to contain
-WANDB_API_KEY= "Your_API_key" found on wandb.ai
-```
 
 **5. Train the model on the kaggle data**
 ```
 
-PYTHONPATH=src uv run python -m mlops_group_20.train wandb.entity=kenzodtu-danmarks-tekniske-universitet-dtu wandb.project=mlops_group_20
+PYTHONPATH=src uv run python -m mlops_group_20.train wandb.entity={"Add your username on wandb"} wandb.project=mlops_group_20
 
 ```
 **6. Evaluate the model on the testing**
