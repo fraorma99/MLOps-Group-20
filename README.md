@@ -123,8 +123,10 @@ uv run python src/mlops_group_20/data.py \
 **5. Train the model on the kaggle data**
 ```
 
-PYTHONPATH=src uv run python -m mlops_group_20.train wandb.entity={"Add your username on wandb"} wandb.project=mlops_group_20
-
+PYTHONPATH=src uv run python -m mlops_group_20.train \
+  wandb.entity={"Write your wandb username"} \
+  wandb.project=mlops_group_20 \
+  training.num_epochs=1
 ```
 **6. Evaluate the model on the testing**
 ```
