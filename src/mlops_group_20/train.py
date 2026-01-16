@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 import hydra
 from omegaconf import DictConfig, OmegaConf
 import wandb
+from torchmetrics import Accuracy, Precision, Recall, F1Score
 #import cProfile - done profiling
 
 from mlops_group_20.model import LanguageClassifier
@@ -158,6 +159,18 @@ def train(cfg: DictConfig):
     else:
         scheduler = None
     
+    # Initialize torchmetrics
+    num_classes = len(languages)
+    train_acc_metric = Accuracy(task='multiclass', num_classes=num_classes).to(device)
+    train_precision_metric = Precision(task='multiclass', num_classes=num_classes, average='weighted').to(device)
+    train_recall_metric = Recall(task='multiclass', num_classes=num_classes, average='weighted').to(device)
+    train_f1_metric = F1Score(task='multiclass', num_classes=num_classes, average='weighted').to(device)
+    
+    val_acc_metric = Accuracy(task='multiclass', num_classes=num_classes).to(device)
+    val_precision_metric = Precision(task='multiclass', num_classes=num_classes, average='weighted').to(device)
+    val_recall_metric = Recall(task='multiclass', num_classes=num_classes, average='weighted').to(device)
+    val_f1_metric = F1Score(task='multiclass', num_classes=num_classes, average='weighted').to(device)
+    
     # Training loop
     num_epochs = int(cfg.training.num_epochs)
     best_val_loss = float('inf')
@@ -166,7 +179,11 @@ def train(cfg: DictConfig):
 
     for epoch in range(num_epochs):
         model.train()
-        train_loss, train_correct, train_total = 0, 0, 0
+        train_loss = 0
+        train_acc_metric.reset()
+        train_precision_metric.reset()
+        train_recall_metric.reset()
+        train_f1_metric.reset()
         
         for texts, labels in train_loader:
             texts, labels = texts.to(device), labels.to(device)
@@ -178,15 +195,24 @@ def train(cfg: DictConfig):
             
             train_loss += loss.item()
             _, predicted = outputs.max(1)
-            train_total += labels.size(0)
-            train_correct += predicted.eq(labels).sum().item()
+            train_acc_metric(predicted, labels)
+            train_precision_metric(predicted, labels)
+            train_recall_metric(predicted, labels)
+            train_f1_metric(predicted, labels)
         
-        train_acc = 100. * train_correct / train_total
+        train_acc = train_acc_metric.compute().item() * 100
+        train_precision = train_precision_metric.compute().item() * 100
+        train_recall = train_recall_metric.compute().item() * 100
+        train_f1 = train_f1_metric.compute().item() * 100
         avg_train_loss = train_loss / len(train_loader)
         
         # Validation phase
         model.eval()
-        val_loss, val_correct, val_total = 0, 0, 0
+        val_loss = 0
+        val_acc_metric.reset()
+        val_precision_metric.reset()
+        val_recall_metric.reset()
+        val_f1_metric.reset()
         with torch.no_grad():
             for texts, labels in val_loader:
                 texts, labels = texts.to(device), labels.to(device)
@@ -194,10 +220,15 @@ def train(cfg: DictConfig):
                 loss = criterion(outputs, labels)
                 val_loss += loss.item()
                 _, predicted = outputs.max(1)
-                val_total += labels.size(0)
-                val_correct += predicted.eq(labels).sum().item()
+                val_acc_metric(predicted, labels)
+                val_precision_metric(predicted, labels)
+                val_recall_metric(predicted, labels)
+                val_f1_metric(predicted, labels)
         
-        val_acc = 100. * val_correct / val_total
+        val_acc = val_acc_metric.compute().item() * 100
+        val_precision = val_precision_metric.compute().item() * 100
+        val_recall = val_recall_metric.compute().item() * 100
+        val_f1 = val_f1_metric.compute().item() * 100
         avg_val_loss = val_loss / len(val_loader)
         if scheduler is not None:
             scheduler.step(avg_val_loss)
@@ -213,8 +244,14 @@ def train(cfg: DictConfig):
                 "epoch": epoch + 1,
                 "train/loss": avg_train_loss,
                 "train/acc": train_acc,
+                "train/precision": train_precision,
+                "train/recall": train_recall,
+                "train/f1": train_f1,
                 "val/loss": avg_val_loss,
                 "val/acc": val_acc,
+                "val/precision": val_precision,
+                "val/recall": val_recall,
+                "val/f1": val_f1,
                 "lr": current_lr,
             })
         
