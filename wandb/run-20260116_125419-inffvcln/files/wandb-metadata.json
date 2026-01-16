@@ -1,0 +1,22 @@
+{
+  "os": "macOS-26.2-arm64-arm-64bit",
+  "python": "CPython 3.12.12",
+  "startedAt": "2026-01-16T11:54:19.911157Z",
+  "args": [
+    "--config-name",
+    "sweep",
+    "--multirun",
+    "wandb.project=mlops_group_20",
+    "wandb.run_name=lr_${optimizer.lr}"
+  ],
+  "program": "-m mlops_group_20.train",
+  "git": {
+    "remote": "https://github.com/fraorma99/MLOps-Group-20.git",
+    "commit": "f207cf876f16af6991c24337e8e777c6f086f044"
+  },
+  "email": "s215148@dtu.dk",
+  "root": "/Users/kenzomaetanimachholm/Desktop/DTU/Jan2026/MLOps-Group-20",
+  "host": "kenzos-mbp.students.clients.local",
+  "executable": "/Users/kenzomaetanimachholm/Desktop/DTU/Jan2026/MLOps-Group-20/.venv/bin/python3",
+  "writerId": "ltdwaasjkcddd25kuydk7jln1xat3ca7"
+}
