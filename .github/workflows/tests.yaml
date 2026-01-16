@@ -1,33 +1,42 @@
-name: Unit Tests
+name: Unit Tests (matrix)
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   test:
-    runs-on: ${{ matrix.operating-system }}
+    name: Tests (os=${{ matrix.os }}, py=${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+
     strategy:
+      fail-fast: false
       matrix:
-        operating-system: ["ubuntu-latest"]  # simplified
-        python-version: ["3.12"]             # matches your >=3.12
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ["3.12", "3.13"]
+        experimental: [false]
+        include:
+          - python: "3.13"
+            experimental: true
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v5
+      - name: Setup uv + Python
+        uses: astral-sh/setup-uv@v7
         with:
+          python-version: ${{ matrix.python }}
           enable-cache: true
 
-      - name: Sync dependencies
-        run: uv sync --dev --python ${{ matrix.python-version }}
+      - name: Sync dependencies (locked)
+        run: uv sync --dev --locked
+
+      - name: PyTorch smoke check
+        run: uv run python -c "import torch; print('torch', torch.__version__)"
 
       - name: Run tests
-        run: |
-          uv run pytest -v tests/
+        run: uv run pytest -v tests/
