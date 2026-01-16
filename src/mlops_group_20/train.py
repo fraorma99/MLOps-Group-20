@@ -236,7 +236,7 @@ def train(cfg: DictConfig):
         train_losses.append(avg_train_loss); val_losses.append(avg_val_loss)
         train_accs.append(train_acc); val_accs.append(val_acc)
         
-        print(f"Epoch {epoch+1}/{num_epochs}: Train Loss: {avg_train_loss:.4f}, Train Acc: {train_acc:.2f}% | Val Loss: {avg_val_loss:.4f}, Val Acc: {val_acc:.2f}%")
+        print(f"Epoch {epoch+1}/{num_epochs}: Train Loss: {avg_train_loss:.4f}, Train Acc: {train_acc:.2f}%, Prec: {train_precision:.2f}%, Rec: {train_recall:.2f}%, F1: {train_f1:.2f}% | Val Loss: {avg_val_loss:.4f}, Val Acc: {val_acc:.2f}%, Prec: {val_precision:.2f}%, Rec: {val_recall:.2f}%, F1: {val_f1:.2f}%")
         # W&B logging
         if cfg.wandb.enabled:
             current_lr = optimizer.param_groups[0]["lr"]
