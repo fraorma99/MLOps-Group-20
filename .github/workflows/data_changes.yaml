@@ -1,0 +1,32 @@
+name: Data change triggering
+
+on:
+  push:
+    paths:
+      - "scripts/download_data.sh"
+  pull_request:
+    paths:
+      - "scripts/download_data.sh"
+
+jobs:
+  run_data_checker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          make dev_requirements
+          pip list
+
+      - name: Download data
+        run: |
+          bash scripts/download_data.sh
