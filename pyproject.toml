@@ -29,6 +29,7 @@ dependencies = [
     "seaborn>=0.13.2",
     "torch==2.6.0",
     "torchaudio>=2.6.0",
+    "torchmetrics>=1.8.2",
     "torchtext>=0.18.0",
     "torchvision>=0.21.0",
     "typer==0.15.1",
