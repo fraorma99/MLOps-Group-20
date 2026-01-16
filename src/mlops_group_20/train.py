@@ -9,13 +9,16 @@ from sklearn.model_selection import train_test_split
 import hydra
 from omegaconf import DictConfig, OmegaConf
 import wandb
+#import cProfile - done profiling
 
 from mlops_group_20.model import LanguageClassifier
 from mlops_group_20.data import Vocabulary, TextDataset, simple_tokenizer
 
+#pr = cProfile.Profile()
 
 @hydra.main(version_base=None, config_path="../../configs", config_name="config")
 def train(cfg: DictConfig):
+    #pr.enable()
     # Load the processed dataset
     data_path = Path(cfg.data.path)
     data = pd.read_pickle(data_path)
@@ -244,6 +247,10 @@ def train(cfg: DictConfig):
 
     if cfg.wandb.enabled:
         wandb.finish()
+    
+    #Profiling finished
+    #pr.disable()
+    #pr.print_stats(sort='cumulative')
 
 if __name__ == "__main__":
     train()
