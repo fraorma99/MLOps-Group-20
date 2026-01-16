@@ -21,7 +21,7 @@ COPY src/ src/
 COPY models/ models/
 COPY data/splits/ data/splits/
 # Metadata files are required for the local package installation
-COPY README.md LICENSE ./ 
+COPY README.md LICENSE ./
 
 # Install the project in editable mode so 'mlops_group_20' is available as a module
 RUN uv pip install -e .
