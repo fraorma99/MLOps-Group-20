@@ -132,6 +132,14 @@ PYTHONPATH=src uv run python -m mlops_group_20.train \
   wandb.entity=fra-orma99-danmarks-tekniske-universitet-dtu \               
   wandb.project=mlops_group_20
 ```
+
+```
+PYTHONPATH=src uv run python -m mlops_group_20.train \
+  --config-name sweep \
+  --multirun \
+  optimizer.lr=0.001,0.0015,0.002 \
+  'wandb.run_name=lr_${optimizer.lr}'
+```
 **bonus. Evaluate the model on the testing**
 ```
 uv run python src/mlops_group_20/evaluate.py
