@@ -119,15 +119,24 @@ uv run python src/mlops_group_20/data.py \
   data/raw/language_detection.csv \
   data/processed/
 ```
-**5. Train the model on the kaggle data**
+
+**5. wandb login**
 ```
-uv run python -m mlops_group_20.train
+uv run login
 ```
-**6. Evaluate the model on the testing**
+paste your api key from wandb account
+
+**6. Train the model on the kaggle data**
+```
+PYTHONPATH=src uv run python -m mlops_group_20.train \
+  wandb.entity={"Write your wandb username"} \
+  wandb.project=mlops_group_20
+```
+**7. Evaluate the model on the testing**
 ```
 uv run python src/mlops_group_20/evaluate.py
 ```
-**7. Visualize performance**
+**8. Visualize performance**
 ```
 uv run python src/mlops_group_20/visualize.py
 ```
