@@ -1,0 +1,5 @@
+[core]
+    remote = remote_storage
+['remote "remote_storage"']
+    url = gs://mlops-group20-dvc-12819019909/dvcstore
+    version_aware = true
