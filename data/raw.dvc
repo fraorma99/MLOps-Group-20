@@ -1,6 +1,11 @@
 outs:
-- md5: 4c4020187321e2a616b9b7066bcc0c81.dir
-  size: 1911016
-  nfiles: 1
-  hash: md5
+- hash: md5
   path: raw
+  files:
+  - relpath: language_detection.csv
+    md5: 82d33d95b43e937ef447a2f8dcb0b046
+    size: 1911016
+    cloud:
+      remote_storage:
+        etag: 08a586f9d6929392031001
+        version_id: '1768672546669349'
