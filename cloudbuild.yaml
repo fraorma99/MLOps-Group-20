@@ -38,3 +38,5 @@ steps:
 images:
   - "europe-west1-docker.pkg.dev/${PROJECT_ID}/mlops-images/train:${SHORT_SHA}"
   - "europe-west1-docker.pkg.dev/${PROJECT_ID}/mlops-images/api:${SHORT_SHA}"
+options:
+  logging: CLOUD_LOGGING_ONLY
