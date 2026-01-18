@@ -2,9 +2,11 @@ name: Data change triggering
 
 on:
   push:
+    branches: [main, Raulito]
     paths:
       - "scripts/download_data.sh"
   pull_request:
+    branches: [main, Raulito]
     paths:
       - "scripts/download_data.sh"
 
