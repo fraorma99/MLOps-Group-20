@@ -32,4 +32,4 @@ jobs:
       # Minimal trial to check if the model code runs
       - name: Small test model
         run: |
-          python -c "from mlops_group_20.model import LanguageClassifier; LanguageClassifier(vocab_size=1000, num_classes=17)"
+          uv run python -c "from mlops_group_20.model import LanguageClassifier; LanguageClassifier(vocab_size=1000, num_classes=17)"
