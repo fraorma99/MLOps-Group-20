@@ -9,4 +9,3 @@ rm language-detection.zip
 mv "Language Detection.csv" language_detection.csv  # Fix Kaggle spaces
 cd ../..
 echo "Dataset ready: data/raw/language_detection.csv"
-#trial
