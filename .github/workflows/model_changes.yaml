@@ -1,14 +1,14 @@
-name: Data changes workflow
+name: Model changes workflow
 
 on:
   push:
-    branches: [main, Raulito]
     paths:
-      - "scripts/download_data.sh"
+      - "models/**"                  # saved weights / artifacts
+      - "mlops_group_20/model.py"    # model definition code
   pull_request:
-    branches: [main, Raulito]
     paths:
-      - "scripts/download_data.sh"
+      - "models/**"
+      - "mlops_group_20/model.py"
 
 jobs:
   run_data_checker:
@@ -29,6 +29,7 @@ jobs:
           uv sync
           pip list
 
-      - name: Download data
+      # Minimal trial to check if the model code runs
+      - name: Small test model
         run: |
-          bash scripts/download_data.sh
+          python -c "from mlops_group_20.model import LanguageClassifier; LanguageClassifier(vocab_size=1000, num_classes=17)"
