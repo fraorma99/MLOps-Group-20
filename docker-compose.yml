@@ -1,7 +1,6 @@
-version: '3.8'
-
 services:
   trainer:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile
@@ -17,6 +16,14 @@ services:
       - ./wandb:/app/wandb:rw
     networks:
       - mlops-network
+    deploy:
+      resources:
+        limits:
+          cpus: '8'
+          memory: 16G
+        reservations:
+          cpus: '4'
+          memory: 8G
 
   api:
     build:
