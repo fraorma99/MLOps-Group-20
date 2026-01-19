@@ -24,13 +24,30 @@ def load_artifacts():
     global model, vocab, idx2label
     
     try:
+        # Resolve paths relative to project root
+        project_root = Path(__file__).parent.parent.parent
+        splits_dir = project_root / "data" / "splits"
+        models_dir = project_root / "models"
+        
         # Load mappings and vocab
-        label_info = pd.read_pickle("data/splits/label_mappings.pkl")
+        label_mappings_path = splits_dir / "label_mappings.pkl"
+        vocab_path = splits_dir / "vocab.pkl"
+        
+        if not label_mappings_path.exists():
+            raise FileNotFoundError(f"Label mappings not found at {label_mappings_path}")
+        if not vocab_path.exists():
+            raise FileNotFoundError(f"Vocabulary not found at {vocab_path}")
+        
+        label_info = pd.read_pickle(label_mappings_path)
         idx2label = label_info['idx2label']
-        vocab = pd.read_pickle("data/splits/vocab.pkl")
+        vocab = pd.read_pickle(vocab_path)
         
         # Load model checkpoint
-        checkpoint = torch.load("models/best_model.pt", map_location=device)
+        model_path = models_dir / "best_model.pt"
+        if not model_path.exists():
+            raise FileNotFoundError(f"Model checkpoint not found at {model_path}")
+        
+        checkpoint = torch.load(model_path, map_location=device)
         
         # Initialize and load model state
         model = LanguageClassifier(
@@ -40,6 +57,7 @@ def load_artifacts():
         model.load_state_dict(checkpoint['model_state_dict'])
         model.eval()
         print(f"✓ Model and artifacts loaded successfully on {device}")
+        print(f"✓ Supported languages: {list(idx2label.values())}")
     except Exception as e:
         print(f"Error loading model: {e}")
         raise RuntimeError("Model artifacts not found. Please run training first.")
