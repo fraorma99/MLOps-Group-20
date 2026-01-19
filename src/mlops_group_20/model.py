@@ -9,10 +9,10 @@ class LanguageClassifier(nn.Module):
         super().__init__()
         self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=0)
         self.lstm = nn.LSTM(
-            embed_dim, 
-            hidden_dim, 
-            num_layers=num_layers, 
-            batch_first=True, 
+            embed_dim,
+            hidden_dim,
+            num_layers=num_layers,
+            batch_first=True,
             bidirectional=True,
             dropout=dropout if num_layers > 1 else 0
         )
@@ -47,3 +47,5 @@ if __name__ == "__main__":
     x = torch.randint(0, 1000, (32, 100))  # batch of 32, sequence length 100
     print(f"Input shape: {x.shape}")
     print(f"Output shape: {model(x).shape}")
+
+# hola

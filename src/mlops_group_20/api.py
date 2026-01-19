@@ -22,16 +22,16 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.ba
 def load_artifacts():
     """Load model and metadata on startup."""
     global model, vocab, idx2label
-    
+
     try:
         # Load mappings and vocab
         label_info = pd.read_pickle("data/splits/label_mappings.pkl")
         idx2label = label_info['idx2label']
         vocab = pd.read_pickle("data/splits/vocab.pkl")
-        
+
         # Load model checkpoint
         checkpoint = torch.load("models/best_model.pt", map_location=device)
-        
+
         # Initialize and load model state
         model = LanguageClassifier(
             vocab_size=checkpoint['vocab_size'],
@@ -53,23 +53,23 @@ def predict(request: TextRequest):
     """Predict the language of the input text."""
     if not request.text:
         raise HTTPException(status_code=400, detail="Text is empty")
-    
+
     # Preprocess the input text
     tokens = simple_tokenizer(request.text)[:200]
     indices = [vocab[token] for token in tokens]
-    
+
     # Padding
     if len(indices) < 200:
         indices += [0] * (200 - len(indices))
-        
+
     input_tensor = torch.tensor([indices], dtype=torch.long).to(device)
-    
+
     # Inference
     with torch.no_grad():
         outputs = model(input_tensor)
         _, predicted_idx = outputs.max(1)
         prediction = idx2label[predicted_idx.item()]
-    
+
     return {
         "input_text": request.text,
         "predicted_language": prediction,

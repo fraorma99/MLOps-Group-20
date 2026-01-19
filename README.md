@@ -19,7 +19,7 @@ We will integrate these key frameworks:
 
 **3. Data**
 
-We will use the "Language Detection" dataset available on Kaggle. 
+We will use the "Language Detection" dataset available on Kaggle.
 
 https://www.kaggle.com/datasets/basilb2s/language-detection
 
@@ -119,9 +119,12 @@ uv run python src/mlops_group_20/data.py \
   data/raw/language_detection.csv \
   data/processed/
 ```
+
 **5. Train the model on the kaggle data**
 ```
-uv run python -m mlops_group_20.train
+
+PYTHONPATH=src uv run python -m mlops_group_20.train wandb.entity={"Add your username on wandb"} wandb.project=mlops_group_20
+
 ```
 **6. Evaluate the model on the testing**
 ```

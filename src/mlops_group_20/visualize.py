@@ -1,7 +1,11 @@
 import torch
 import matplotlib.pyplot as plt
 import numpy as np
-torch.serialization.add_safe_globals([np.ndarray])  # Safe for your use
+import subprocess
+import sys
+from pathlib import Path
+
+torch.serialization.add_safe_globals([np.ndarray])
 history = torch.load("models/training_history.pt", weights_only=False)
 epochs = history['epochs']
 
@@ -28,3 +32,13 @@ plt.ylabel('Accuracy %')
 plt.tight_layout()
 plt.savefig('reports/figures/training_curves.png', dpi=300, bbox_inches='tight')
 plt.show()
+
+#Display the confusion matrix image
+confusion_matrix_path = Path('reports/figures/confusion_matrix.png')
+if confusion_matrix_path.exists():
+    if sys.platform == 'darwin':  # macOS
+        subprocess.run(['open', str(confusion_matrix_path)])
+    elif sys.platform == 'win32':  # Windows
+        subprocess.run(['start', str(confusion_matrix_path)], shell=True)
+    else:  # Linux
+        subprocess.run(['xdg-open', str(confusion_matrix_path)])

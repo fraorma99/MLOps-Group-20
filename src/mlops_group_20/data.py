@@ -13,22 +13,22 @@ class Vocabulary:
         self.idx2token = {0: '<pad>', 1: '<unk>'}
         self.min_freq = min_freq
         self.default_index = 1  # <unk>
-    
+
     def build(self, token_lists):
         """Build vocabulary from list of token lists."""
         counter = Counter()
         for tokens in token_lists:
             counter.update(tokens)
-        
+
         for token, freq in counter.items():
             if freq >= self.min_freq and token not in self.token2idx:
                 idx = len(self.token2idx)
                 self.token2idx[token] = idx
                 self.idx2token[idx] = token
-    
+
     def __len__(self):
         return len(self.token2idx)
-    
+
     def __getitem__(self, token):
         return self.token2idx.get(token, self.default_index)
 
@@ -44,22 +44,22 @@ class TextDataset(Dataset):
         self.vocab = vocab
         self.tokenizer = tokenizer
         self.max_len = max_len
-    
+
     def __len__(self):
         return len(self.texts)
-    
+
     def __getitem__(self, idx):
         text = self.texts[idx]
         label = self.labels[idx]
-        
+
         # Tokenize and convert to indices
         tokens = self.tokenizer(text)[:self.max_len]
         indices = [self.vocab[token] for token in tokens]
-        
+
         # Pad or truncate to max_len
         if len(indices) < self.max_len:
             indices += [0] * (self.max_len - len(indices))  # 0 is padding
-        
+
         return torch.tensor(indices, dtype=torch.long), torch.tensor(label, dtype=torch.long)
 
 class LanguageDataset(Dataset):
@@ -68,16 +68,16 @@ class LanguageDataset(Dataset):
         self.data = pd.read_csv(data_path)
         self.texts = self.data['Text'].tolist()
         self.labels = self.data['Language'].tolist()
-        
+
     def __len__(self) -> int:
         return len(self.texts)
-    
+
     def __getitem__(self, index: int) -> dict[str, Any]:
         return {
             'text': self.texts[index],
             'label': self.labels[index]
         }
-    
+
     def preprocess(self, output_folder: Path) -> None:
         """Save processed data."""
         output_folder.mkdir(parents=True, exist_ok=True)
