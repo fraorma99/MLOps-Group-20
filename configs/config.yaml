@@ -57,7 +57,7 @@ scheduler:
 wandb:
   enabled: true
   project: "mlops_group_20"
-  entity: "Group 20"
+  entity: null
   api_key: ${oc.env:WANDB_API_KEY, null}
   run_name: null
   notes: null
