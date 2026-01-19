@@ -47,5 +47,3 @@ if __name__ == "__main__":
     x = torch.randint(0, 1000, (32, 100))  # batch of 32, sequence length 100
     print(f"Input shape: {x.shape}")
     print(f"Output shape: {model(x).shape}")
-
-# hola

@@ -178,6 +178,7 @@ cython_debug/
 code .gitignore  # Edit → paste at bottom:
 # Data (large files)
 data/
+reports/figures/*.png
 
 # --- MLOps Specifics ---
 # Ignore all model files (very large)
