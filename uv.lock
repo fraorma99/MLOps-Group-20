@@ -2006,10 +2006,12 @@ source = { editable = "." }
 dependencies = [
     { name = "cookiecutter" },
     { name = "dvc" },
+    { name = "dvc-gs" },
     { name = "fastapi" },
     { name = "hydra-core" },
     { name = "kaggle" },
     { name = "matplotlib" },
+    { name = "numpy" },
     { name = "pandas" },
     { name = "scikit-learn" },
     { name = "seaborn" },
