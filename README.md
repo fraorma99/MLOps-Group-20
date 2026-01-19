@@ -126,11 +126,13 @@ uv run wandb login
 ```
 paste your api key from wandb account
 
-**6. Train the model on the kaggle data**
+**6. Train the model on the kaggle data with sweep of lr**
 ```
 PYTHONPATH=src uv run python -m mlops_group_20.train \
-  wandb.entity=fra-orma99-danmarks-tekniske-universitet-dtu \               
-  wandb.project=mlops_group_20
+  --config-name sweep \
+  --multirun \
+  optimizer.lr=0.001,0.0015,0.002 \
+  'wandb.run_name=lr_${optimizer.lr}'
 ```
 **bonus. Evaluate the model on the testing**
 ```
