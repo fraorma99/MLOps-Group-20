@@ -87,7 +87,7 @@ The directory structure of the project looks like this:
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
-
+Data from: https://www.kaggle.com/datasets/basilb2s/language-detection
 
 ## Getting Started
 ```bash
@@ -142,46 +142,27 @@ uv run python src/mlops_group_20/visualize.py
 ```
 
 ## Docker
+```
+# Build (data processed at build time)
+docker build -t mlops-fran-v1 .
 
-**1. Build a static image named language_api**
-```
-docker build --platform linux/amd64 -f ./dockerfiles/api.dockerfile . -t language_api:latest
-```
-**2. Start a live container based on that image. If the container name already exists, it delets the old version and creates a new one**
-```
-docker rm -f api_container || true && docker run --rm --platform linux/amd64 -p 8000:8000 --name api_container language_api:latest
-```
-then, verify the connection at http://localhost:8000/docs#/default/root__get
+# Train with sweep (default - no interactive wandb login needed)
+docker run --rm \
+  -e WANDB_API_KEY=your_key_here \
+  -e WANDB_MODE=online \
+  -v $(pwd)/wandb:/app/wandb \
+  mlops-fran-v1
 
-**3. Build training image named language_train**
-```
-docker build --platform linux/amd64 -f ./dockerfiles/train.dockerfile . -t language_train:latest
-```
-**4. Execute the training**
-```
-docker run --rm --platform linux/amd64 \
-  -v $(pwd)/models:/app/models \
-  --name train_container language_train:latest
-```
-NOT WORKING!!!
+# Evaluate
+docker run --rm mlops-fran-v1 python src/mlops_group_20/evaluate.py
 
-**TEMPORARY SOLUTION**
-```
-docker run --rm --platform linux/amd64 \
-  -v $(pwd)/models:/app/models \
-  --name train_container language_train:latest \
-  wandb.enabled=false \
-  training.num_epochs=10
-```
+# Visualize  
+docker run --rm mlops-fran-v1 python src/mlops_group_20/visualize.py
 
-**5. Verify the model performance**
+# Custom sweep
+docker run --rm mlops-fran-v1 python -m mlops_group_20.train \
+  --config-name sweep --multirun optimizer.lr=0.0005,0.001
 
-by using the "predict" tab at  http://localhost:8000/docs#/default/root__get
-
-**6. Push to GitHub**
-```
-git add dockerfiles/ .dockerignore .gitignore pyproject.toml uv.lock
-git commit -m "chore: finalize docker setup and local training pipeline (M10)"
 git push origin main
 ```
 
