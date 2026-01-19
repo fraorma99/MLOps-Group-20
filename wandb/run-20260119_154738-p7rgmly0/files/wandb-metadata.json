@@ -1,0 +1,33 @@
+{
+  "os": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "CPython 3.12.12",
+  "startedAt": "2026-01-19T14:47:38.965994Z",
+  "args": [
+    "--config-name",
+    "config",
+    "--multirun",
+    "optimizer.lr=0.001,0.0015,0.002",
+    "wandb.run_name=lr_${optimizer.lr}"
+  ],
+  "program": "-m mlops_group_20.train",
+  "git": {
+    "remote": "https://github.com/fraorma99/MLOps-Group-20",
+    "commit": "72ec545cad95a2a1b606f9224238d06eb3139f50"
+  },
+  "email": "raulalcazarrr@gmail.com",
+  "root": "/home/raul_linux/MLOps-Group-20",
+  "host": "LAPTOP-2KOOBHJ1",
+  "executable": "/home/raul_linux/MLOps-Group-20/.venv/bin/python3",
+  "cpu_count": 4,
+  "cpu_count_logical": 8,
+  "disk": {
+    "/": {
+      "total": "1081101176832",
+      "used": "20495192064"
+    }
+  },
+  "memory": {
+    "total": "4041441280"
+  },
+  "writerId": "gpiku9ltt3429pibh41e8dyeol1obihp"
+}

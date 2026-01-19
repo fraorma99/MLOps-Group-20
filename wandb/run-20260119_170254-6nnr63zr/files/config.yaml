@@ -1,0 +1,101 @@
+_wandb:
+    value:
+        cli_version: 0.24.0
+        e:
+            4lu0axzuwnkdh0og1y2g25gkgzeh6685:
+                args:
+                    - --config-name
+                    - config
+                    - --multirun
+                    - optimizer.lr=0.001,0.0015,0.002
+                    - wandb.run_name=lr_${optimizer.lr}
+                cpu_count: 4
+                cpu_count_logical: 8
+                disk:
+                    /:
+                        total: "1081101176832"
+                        used: "20593848320"
+                email: raulalcazarrr@gmail.com
+                executable: /home/raul_linux/MLOps-Group-20/.venv/bin/python3
+                git:
+                    commit: 72ec545cad95a2a1b606f9224238d06eb3139f50
+                    remote: https://github.com/fraorma99/MLOps-Group-20
+                host: LAPTOP-2KOOBHJ1
+                memory:
+                    total: "4041441280"
+                os: Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39
+                program: -m mlops_group_20.train
+                python: CPython 3.12.12
+                root: /home/raul_linux/MLOps-Group-20
+                startedAt: "2026-01-19T16:02:54.903538Z"
+                writerId: 4lu0axzuwnkdh0og1y2g25gkgzeh6685
+        m: []
+        python_version: 3.12.12
+        t:
+            "1":
+                - 1
+                - 5
+                - 50
+                - 53
+                - 105
+            "2":
+                - 1
+                - 5
+                - 50
+                - 53
+                - 105
+            "3":
+                - 13
+                - 16
+            "4": 3.12.12
+            "5": 0.24.0
+            "12": 0.24.0
+            "13": linux-x86_64
+data:
+    value:
+        max_len: 200
+        path: data/processed/processed.pkl
+        seed: 42
+        split:
+            stratify_column: Language
+            test_size: 0.15
+            train_size: 0.7
+            val_size: 0.15
+        splits_dir: data/splits
+        vocab_min_freq: 2
+model:
+    value:
+        dropout: 0.3
+        embed_dim: 128
+        hidden_dim: 256
+        name: LanguageClassifier
+        num_layers: 2
+optimizer:
+    value:
+        lr: 0.001
+        name: adam
+        weight_decay: 0
+scheduler:
+    value:
+        factor: 0.5
+        mode: min
+        name: reduce_on_plateau
+        patience: 2
+training:
+    value:
+        batch_size: 64
+        device: auto
+        num_epochs: 10
+        save_best_to: models/best_model.pt
+        save_history_to: models/training_history.pt
+wandb:
+    value:
+        api_key: null
+        enabled: true
+        entity: raulalcazarrr-danmarks-tekniske-universitet-dtu
+        log_freq: 100
+        notes: null
+        project: mlops_group_20
+        run_name: lr_0.001
+        tags: []
+        watch_model: false
