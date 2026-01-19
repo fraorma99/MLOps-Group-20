@@ -1,0 +1,2 @@
+- optimizer.lr=0.001
+- wandb.run_name=lr_$\{optimizer.lr\}
