@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  trainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mlops-trainer
+    environment:
+      - PYTHONUNBUFFERED=1
+      - WANDB_API_KEY=${WANDB_API_KEY:-}
+      - WANDB_ENTITY=${WANDB_ENTITY:-}
+      - WANDB_PROJECT=${WANDB_PROJECT:-}
+    volumes:
+      - ./models:/app/models:rw
+      - ./outputs:/app/outputs:rw
+      - ./wandb:/app/wandb:rw
+    networks:
+      - mlops-network
+
+  api:
+    build:
+      context: .
+      dockerfile: dockerfiles/api.dockerfile
+    container_name: mlops-api
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./models:/app/models:ro
+      - ./data/splits:/app/data/splits:ro
+    depends_on:
+      - trainer
+    networks:
+      - mlops-network
+
+networks:
+  mlops-network:
+    driver: bridge
