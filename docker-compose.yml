@@ -26,6 +26,7 @@ services:
           memory: 8G
 
   api:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: dockerfiles/api.dockerfile
