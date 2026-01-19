@@ -177,17 +177,7 @@ cython_debug/
 #.idea/
 code .gitignore  # Edit → paste at bottom:
 # Data (large files)
-# Ignore all files under data/ (datasets, artifacts)
-data/**
-
-# ...but keep DVC pointer files and DVC-generated .gitignore files
-!data/**/*.dvc
-!data/**/.gitignore
-
-# Re-include directories so the exceptions above work
-!data/**/
-
-reports/figures/*.png
+data/
 
 # --- MLOps Specifics ---
 # Ignore all model files (very large)
@@ -200,5 +190,4 @@ data/processed/
 # Ignore local split artifacts
 data/splits/*.pkl
 
-# Ignore all generated figures
-reports/figures/
+# Ignore experiment logs
