@@ -32,5 +32,5 @@ RUN uv pip install -e .
 # Expose the port that FastAPI will use
 EXPOSE 8000
 
-# Start the API via the python module to allow Hydra initialization
-ENTRYPOINT ["uv", "run", "python", "-m", "mlops_group_20.api"]
+# Start the API with uvicorn
+ENTRYPOINT ["uv", "run", "uvicorn", "mlops_group_20.api:app", "--host", "0.0.0.0", "--port", "8000"]
