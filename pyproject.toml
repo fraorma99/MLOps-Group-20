@@ -33,7 +33,7 @@ dependencies = [
     "torchtext>=0.18.0",
     "torchvision>=0.21.0",
     "typer==0.15.1",
-    "uvicorn[standard]==0.34.0",
+    "uvicorn==0.34.0",
     "wandb>=0.24.0",
 ]
 

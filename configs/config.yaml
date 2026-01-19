@@ -57,7 +57,7 @@ scheduler:
 wandb:
   enabled: true
   project: "mlops_group_20"
-  entity: "raulalcazarrr-danmarks-tekniske-universitet-dtu"
+  entity: null
   api_key: ${oc.env:WANDB_API_KEY, null}
   run_name: null
   notes: null

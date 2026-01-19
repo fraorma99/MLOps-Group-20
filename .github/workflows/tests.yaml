@@ -2,9 +2,9 @@ name: Unit Tests (matrix)
 
 on:
   push:
-    branches: [main, Raulito]
+    branches: [main]
   pull_request:
-    branches: [main, Raulito]
+    branches: [main]
 
 jobs:
   lint:
