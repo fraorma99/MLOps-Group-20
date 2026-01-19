@@ -105,18 +105,15 @@ Then head to the **Docker Deployment** section below to get started!
 
 If you just want to test the language detection API without running training:
 
-**1. Create `.env` file** in the project root:
-```bash
-cat > .env << EOF
-WANDB_API_KEY=your_wandb_api_key_here
-EOF
-```
-
-This is only needed if running training. The API-only version doesn't use wandb.
-
-**2. Run the API container**:
+**1. Run the API container** (no setup needed):
 ```bash
 docker run -d --name mlops-api -p 8000:8000 kenzodtu/mlops-api:latest
+```
+
+**2. Wait for startup** (takes ~30 seconds on first run):
+The container will download dependencies on first launch. Check it's ready:
+```bash
+docker logs mlops-api -f  # Press Ctrl+C when you see "Application startup complete"
 ```
 
 **3. Open the web UI**:
