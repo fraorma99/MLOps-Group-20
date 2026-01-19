@@ -67,6 +67,14 @@ def load_artifacts():
 def root():
     return {"message": "Language Detection API is running. Use /predict to detect language."}
 
+@app.get("/languages")
+def get_languages():
+    """Return the list of supported languages."""
+    if idx2label is None:
+        raise HTTPException(status_code=500, detail="Model not loaded yet")
+    languages = sorted(list(idx2label.values()))
+    return {"supported_languages": languages}
+
 @app.get("/ui", response_class=HTMLResponse)
 def ui():
     """Serve a simple web UI for language detection."""
@@ -195,6 +203,32 @@ def ui():
                 margin-top: 10px;
                 text-align: center;
             }
+            .languages {
+                margin-top: 20px;
+                padding: 15px;
+                background: #f0f4ff;
+                border-radius: 10px;
+                border-left: 4px solid #667eea;
+            }
+            .languages-title {
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 10px;
+                font-size: 0.9em;
+            }
+            .languages-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .language-tag {
+                background: white;
+                color: #667eea;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 0.85em;
+                border: 1px solid #667eea;
+            }
         </style>
     </head>
     <body>
@@ -204,6 +238,11 @@ def ui():
             
             <textarea id="textInput" placeholder="Type or paste any text here..."></textarea>
             <p class="example">Try: "Hello, how are you?" or "Bonjour, comment allez-vous?"</p>
+            
+            <div class="languages">
+                <div class="languages-title">✨ Supported Languages:</div>
+                <div class="languages-list" id="languagesList">Loading...</div>
+            </div>
             
             <button onclick="detectLanguage()">Detect Language</button>
             
@@ -216,6 +255,26 @@ def ui():
         </div>
 
         <script>
+            // Load supported languages on page load
+            async function loadLanguages() {
+                try {
+                    const response = await fetch('/languages');
+                    const data = await response.json();
+                    const languages = data.supported_languages;
+                    const listDiv = document.getElementById('languagesList');
+                    
+                    listDiv.innerHTML = languages.map(lang => 
+                        `<span class="language-tag">${lang}</span>`
+                    ).join('');
+                } catch (error) {
+                    console.error('Failed to load languages:', error);
+                    document.getElementById('languagesList').textContent = 'Failed to load languages';
+                }
+            }
+            
+            // Load languages when page loads
+            window.addEventListener('load', loadLanguages);
+            
             async function detectLanguage() {
                 const text = document.getElementById('textInput').value.trim();
                 const resultDiv = document.getElementById('result');

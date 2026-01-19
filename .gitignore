@@ -185,7 +185,7 @@ reports/figures/*.png
 
 # Ignore all raw and processed data
 #data/raw/
-#data/processed/
+data/processed/
 
 # Ignore all generated figures
 reports/figures/
