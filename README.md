@@ -90,62 +90,149 @@ started with Machine Learning Operations (MLOps).
 Data from: https://www.kaggle.com/datasets/basilb2s/language-detection
 
 ## Getting Started
+
+Clone the repository:
 ```bash
 git clone https://github.com/fraorma99/MLOps-Group-20.git
 cd MLOps-Group-20
 ```
-to clone Fran_V1:
+
+Then head to the **Docker Deployment** section below to get started!
+
+## 🐳 Docker Deployment
+
+### Quick Start (API Only)
+
+If you just want to test the language detection API without running training:
+
+**1. Create `.env` file** in the project root:
 ```bash
-git clone -b Fran_V1 https://github.com/fraorma99/MLOps-Group-20.git
-cd MLOps-Group-20
+cat > .env << EOF
+WANDB_API_KEY=your_wandb_api_key_here
+EOF
 ```
 
-**1. Install dependencies**
-```
-uv sync
-./scripts/setup.sh
-```
-**2. Install the package in "editable" mode (-e)**
-```
-uv pip install -e .
-```
-**3. Download dataset**
-```
-./scripts/download_data.sh
-```
-**4. Process data**
-```
-uv run python src/mlops_group_20/data.py \
-  data/raw/language_detection.csv \
-  data/processed/
+This is only needed if running training. The API-only version doesn't use wandb.
+
+**2. Run the API container**:
+```bash
+docker run -d --name mlops-api -p 8000:8000 kenzodtu/mlops-api:latest
 ```
 
-**5. wandb login**
-```
-uv run wandb login
-```
-paste your api key from wandb account
+**3. Open the web UI**:
+Visit [http://localhost:8000/ui](http://localhost:8000/ui)
 
-**6. Train the model on the kaggle data with sweep of lr**
-```
-PYTHONPATH=src uv run python -m mlops_group_20.train \
-  --config-name sweep \
-  --multirun \
-  optimizer.lr=0.001,0.0015,0.002 \
-  'wandb.run_name=lr_${optimizer.lr}'
-```
-**bonus. Evaluate the model on the testing**
-```
-uv run python src/mlops_group_20/evaluate.py
-```
-**bonus. Visualize performance**
-```
-uv run python src/mlops_group_20/visualize.py
-```
+Type any text and get instant language detection with confidence scores! 🎉
 
-## Docker - update to main once merged and test to see if .env is needed since login manually is avaiable
+---
+
+### Full Setup with Training (docker-compose)
+
+If you want to run training + API together on your machine:
+
+**Prerequisites**:
+- Docker Desktop installed ([download here](https://www.docker.com/products/docker-desktop))
+- `.env` file created (see above)
+- At least 8GB free disk space
+
+**1. Create `.env` file** (same as above)
+
+**2. Start the full stack**:
+```bash
+docker compose up -d
 ```
 
+This will:
+- Start the trainer container to process data and train the model
+- Save trained models to `./models/`
+- Start the API container that uses the trained models
+- Logs are visible with `docker compose logs -f`
+
+**3. Access the API**:
+- Web UI: [http://localhost:8000/ui](http://localhost:8000/ui)
+- API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+- Health check: `curl http://localhost:8000/health`
+
+**4. Make predictions** (command line):
+```bash
+curl -X POST "http://localhost:8000/predict" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Bonjour, comment allez-vous?"}'
+```
+
+Response:
+```json
+{
+  "input_text": "Bonjour, comment allez-vous?",
+  "predicted_language": "French",
+  "status": "success"
+}
+```
+
+---
+
+### Stopping Services
+
+```bash
+# Stop all services
+docker compose down
+
+# Stop and remove volumes (clean slate)
+docker compose down -v
+```
+
+---
+
+### Troubleshooting
+
+**API won't start**: Check if port 8000 is already in use
+```bash
+lsof -i :8000  # List what's using port 8000
+kill -9 <PID>  # Kill the process
+```
+
+**Training still running**: Check logs
+```bash
+docker compose logs -f trainer
+```
+
+**Images not found**: Pull latest versions
+```bash
+docker pull kenzodtu/mlops-api:latest
+docker pull kenzodtu/mlops-group-20-trainer:latest
+```
+
+---
+
+### Manual Docker Commands (if not using docker-compose)
+
+Build trainer image locally:
+```bash
 docker build --platform linux/amd64 -t mlops-kenzov3 .
-docker run -it --name mlops-trainer -v $(pwd)/models:/app/models -v $(pwd)/outputs:/app/outputs -v $(pwd)/wandb:/app/wandb -e WANDB_API_KEY=$WANDB_API_KEY -e WANDB_ENTITY=$WANDB_ENTITY -e WANDB_PROJECT=$WANDB_PROJECT mlops-kenzov3
+```
+
+Run trainer:
+```bash
+docker run -it --name mlops-trainer \
+  -v $(pwd)/models:/app/models \
+  -v $(pwd)/outputs:/app/outputs \
+  -v $(pwd)/wandb:/app/wandb \
+  -e WANDB_API_KEY=$WANDB_API_KEY \
+  -e WANDB_ENTITY=$WANDB_ENTITY \
+  -e WANDB_PROJECT=$WANDB_PROJECT \
+  mlops-kenzov3
+```
+
+Build API image:
+```bash
+docker build --platform linux/amd64 -f dockerfiles/api.dockerfile -t mlops-api:latest .
+```
+
+Run API:
+```bash
+docker run -d --name mlops-api \
+  -p 8000:8000 \
+  -v $(pwd)/models:/app/models:ro \
+  -v $(pwd)/data/splits:/app/data/splits:ro \
+  mlops-api:latest
 ```

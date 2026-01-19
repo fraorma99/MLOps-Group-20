@@ -1,50 +1,29 @@
 services:
   trainer:
-    platform: linux/amd64
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: kenzodtu/mlops-group-20-trainer:latest
     container_name: mlops-trainer
-    environment:
-      - PYTHONUNBUFFERED=1
-      - WANDB_API_KEY=${WANDB_API_KEY:-}
-      - WANDB_ENTITY=${WANDB_ENTITY:-}
-      - WANDB_PROJECT=${WANDB_PROJECT:-}
     volumes:
-      - ./models:/app/models:rw
-      - ./outputs:/app/outputs:rw
-      - ./wandb:/app/wandb:rw
-    networks:
-      - mlops-network
-    deploy:
-      resources:
-        limits:
-          cpus: '8'
-          memory: 16G
-        reservations:
-          cpus: '4'
-          memory: 8G
+      - ./models:/app/models
+      - ./outputs:/app/outputs
+      - ./wandb:/app/wandb
+    environment:
+      - WANDB_API_KEY=${WANDB_API_KEY}
+      - WANDB_ENTITY=${WANDB_ENTITY}
+      - WANDB_PROJECT=${WANDB_PROJECT}
+    stdin_open: true
+    tty: true
 
   api:
-    platform: linux/amd64
-    build:
-      context: .
-      dockerfile: dockerfiles/api.dockerfile
+    image: kenzodtu/mlops-api:latest
     container_name: mlops-api
     ports:
       - "8000:8000"
-    environment:
-      - API_HOST=0.0.0.0
-      - API_PORT=8000
-      - PYTHONUNBUFFERED=1
     volumes:
       - ./models:/app/models:ro
       - ./data/splits:/app/data/splits:ro
     depends_on:
       - trainer
-    networks:
-      - mlops-network
 
 networks:
-  mlops-network:
+  default:
     driver: bridge
