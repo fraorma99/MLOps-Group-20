@@ -141,28 +141,9 @@ uv run python src/mlops_group_20/evaluate.py
 uv run python src/mlops_group_20/visualize.py
 ```
 
-## Docker
-```
-# Build (data processed at build time)
-docker build -t mlops-fran-v1 .
-
-# Train with sweep (default - no interactive wandb login needed)
-docker run --rm \
-  -e WANDB_API_KEY=your_key_here \
-  -e WANDB_MODE=online \
-  -v $(pwd)/wandb:/app/wandb \
-  mlops-fran-v1
-
-# Evaluate
-docker run --rm mlops-fran-v1 python src/mlops_group_20/evaluate.py
-
-# Visualize  
-docker run --rm mlops-fran-v1 python src/mlops_group_20/visualize.py
-
-# Custom sweep
-docker run --rm mlops-fran-v1 python -m mlops_group_20.train \
-  --config-name sweep --multirun optimizer.lr=0.0005,0.001
-
-git push origin main
+## Docker - update to main once merged and test to see if .env is needed since login manually is avaiable
 ```
 
+docker build --platform linux/amd64 -t mlops-kenzov3 .
+docker run -it --name mlops-trainer -v $(pwd)/models:/app/models -v $(pwd)/outputs:/app/outputs -v $(pwd)/wandb:/app/wandb -e WANDB_API_KEY=$WANDB_API_KEY -e WANDB_ENTITY=$WANDB_ENTITY -e WANDB_PROJECT=$WANDB_PROJECT mlops-kenzov3
+```
