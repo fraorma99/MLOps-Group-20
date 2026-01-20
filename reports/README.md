@@ -292,7 +292,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 12 fill here ---
+--- We configured our experiments with Hydra configs using config.yaml. For sweeps we used Hydra multirun.  ---
 
 ### Question 13
 
@@ -307,7 +307,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 13 fill here ---
+--- We made use of config files on Hydra. When an experiment is run it saves the metadata under multirun/ for reproducibility. To use the exact Hydra sweep config saves with the run go to the multirun folder and under the timestamp/multirun.yaml and subfolder 0/hydra/config.yaml and use it by python [train.py](http://_vscodecontentref_/1) --config-path multirun/<timestamp>/0/.hydra --config-name config in the terminal. We also saved the splits in our data in data/processed/splits/ so that the data is split the same time each run. Seeds are set in config data.seed to keep tokenization and splits and model init. Metrics and artifacts are saved to disk and W&B logs the metrics from torchmetrics.---
 
 ### Question 14
 
@@ -324,7 +324,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 14 fill here ---
+--- ![train](figures/wandb_train.png) ![val](figures/wandb_val.png) The two images show training and validation logging from the hyperparameter sweep, where we sweep learning rate. The figures show us that as we train our model we generally decrease loss and increase accuracy. We monitor the convergence and generalization over each epoch on W&B. In the validation plot, we look for low, stable loss and accuracy that tracks (but stays below) train accuracy as it helps us catch overfitting early. Additionally, once validation loss plateaus the ReduceLROnPlateau in train.py halves the learning rate (patience=2, factor=0.5). Each sweep run is logged in W&B with the Hydra config, so we can sort runs by validation loss/accuracy/F1 and download the best model artifact for implementing the API model. ---
 
 ### Question 15
 
@@ -339,7 +339,14 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 15 fill here ---
+--- For our project we developed two images: one for training and one for deployment. The docker images also us to replicate the results of our project across different machines. For example to run the training docker image (lr=0.001) one must update the .env file with their API key then run 'docker login / docker run --platform linux/amd64 \
+  -v $(pwd)/.env:/app/.env:ro \
+  --env-file $(pwd)/.env \
+  kenzodtu/mlops-group-20-trainer:latest
+' and can check wandb.ai for their trainign results on lr=0.001. To run the API docker that shows the deployment phase of the project one must run 'docker login
+docker pull --platform linux/amd64 kenzodtu/mlops-api:latest
+docker run -d --name mlops-api --platform linux/amd64 -p 8000:8000 kenzodtu/mlops-api:latest
+' then go to 'localhost:8000/ui' and refresh after 20-30 seconds as it launches the program. Then you can test your own phrases on our language detection API. ---
 
 ### Question 16
 
@@ -354,7 +361,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 16 fill here ---
+---  ---
 
 ## Working in the cloud
 
