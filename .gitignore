@@ -181,13 +181,10 @@ code .gitignore  # Edit → paste at bottom:
 # --- MLOps Specifics ---
 #Models and split artifacts should be tracked for deployment
 
-# Ignore all raw and processed data
-#data/raw/
-data/processed/
-
-#Ignore experiment tracking logs (for now)
+# #Ignore experiment tracking logs (for now)
 wandb/
 multirun/
+outputs/
 
 
 #Ignore experiment tracking logs (for now)

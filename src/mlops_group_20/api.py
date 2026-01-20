@@ -48,7 +48,12 @@ def load_artifacts():
         if not model_path.exists():
             raise FileNotFoundError(f"Model checkpoint not found at {model_path}")
         
-        checkpoint = torch.load(model_path, map_location=device)
+        try:
+            checkpoint = torch.load(model_path, map_location='cpu')
+        except RuntimeError as e:
+            # If standard load fails, try with weights_only=False (older PyTorch format)
+            print(f"Standard torch.load failed: {e}. Trying with weights_only=False...")
+            checkpoint = torch.load(model_path, map_location='cpu', weights_only=False)
         
         # Initialize and load model state
         model = LanguageClassifier(

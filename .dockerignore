@@ -15,8 +15,32 @@ __pycache__
 
 # Data and Models (We mount these as volumes or handle them separately)
 data/raw/*
+data/raw.dvc
+#data/processed/*
+data/processed\ 2/*
+# Keep splits but ignore the rest in processed
+!data/splits/
 reports/figures/*
 
 # Local dev configs
 .devcontainer
 .vscode
+
+# Development and experiment artifacts
+notebooks/
+outputs/
+multirun/
+wandb/
+tests/
+docs/
+scripts/
+images/
+reports/
+profile.prof
+
+# Additional unnecessary files
+tasks.py
+.gitignore
+.dockerignore
+cloudbuild.yaml
+docker-compose.yml
