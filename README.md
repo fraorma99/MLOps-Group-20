@@ -40,47 +40,54 @@ Evolution: As the project progresses, we may investigate "data drifting" by intr
 
 The directory structure of the project looks like this:
 ```txt
-├── .github/                  # Github actions and dependabot
-│   ├── dependabot.yaml
+MLOps-Group-20/
+├── .devcontainer/           # Isolated development setup
+├── .github/                 # CI/CD workflows
 │   └── workflows/
-│       └── tests.yaml
-├── configs/                  # Configuration files
-├── data/                     # Data directory
-│   ├── processed
-│   └── raw
-├── dockerfiles/              # Dockerfiles
-│   ├── api.Dockerfile
-│   └── train.Dockerfile
-├── docs/                     # Documentation
+│       └── tests.yaml       # Automated pytest execution
+├── configs/                 # Hydra configuration files
+│   └── config.yaml          # Main experiment config
+├── data/                    # Data storage directory
+│   ├── processed/           # Final processed dataset
+│   ├── raw/                 # Original CSV files
+│   └── splits/              # Vocab and mappings
+├── dockerfiles/             # Container recipes
+│   ├── api.dockerfile       # FastAPI service image
+│   └── train.dockerfile     # Training environment image
+├── docs/                    # Project documentation
 │   ├── mkdocs.yml
 │   └── source/
-│       └── index.md
-├── models/                   # Trained models
-├── notebooks/                # Jupyter notebooks
-├── reports/                  # Reports
+├── images/                  # Generated visual assets
+│   └── figures/             # Performance plots (M14)
+├── models/                  # Trained model artifacts
+│   ├── best_model.pt        # Top-performing weights
+│   └── training_history.pt  # Historical training logs
+├── multirun/                # Hydra multirun logs
+├── notebooks/               # Experimental Jupyter notebooks
+├── outputs/                 # Single run outputs
+├── reports/                 # Project reports
 │   └── figures/
-├── src/                      # Source code
-│   ├── project_name/
-│   │   ├── __init__.py
-│   │   ├── api.py
-│   │   ├── data.py
-│   │   ├── evaluate.py
-│   │   ├── models.py
-│   │   ├── train.py
-│   │   └── visualize.py
-└── tests/                    # Tests
-│   ├── __init__.py
-│   ├── test_api.py
+├── scripts/                 # Utility shell scripts
+│   ├── download_data.sh
+│   └── setup.sh
+├── src/                     # Source code package
+│   └── mlops_group_20/
+│       ├── api.py           # FastAPI endpoint
+│       ├── data.py          # Preprocessing logic
+│       ├── evaluate.py      # Test set evaluation
+│       ├── model.py         # Neural network architecture
+│       ├── train.py         # Main training loop
+│       └── visualize.py     # Metrics plotting
+├── tests/                   # Automated unit tests
 │   ├── test_data.py
 │   └── test_model.py
-├── .gitignore
-├── .pre-commit-config.yaml
-├── LICENSE
-├── pyproject.toml            # Python project file
-├── README.md                 # Project README
-├── requirements.txt          # Project requirements
-├── requirements_dev.txt      # Development requirements
-└── tasks.py                  # Project tasks
+├── wandb/                   # WandB local logs
+│
+├── .dvc/                    # Data versioning metadata
+├── cloudbuild.yaml          # Google Cloud build
+├── docker-compose.yml       # Multi-container orchestration
+├── pyproject.toml           # Project dependencies (UV)
+└── uv.lock                  # Dependency lock file
 ```
 
 
