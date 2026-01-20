@@ -58,9 +58,9 @@ def evaluate():
     cm = confusion_matrix(all_labels, all_preds)
     sns.heatmap(cm, annot=True, fmt='d', xticklabels=idx2label.values(), yticklabels=idx2label.values(), cmap='Blues')
     plt.title(f'Confusion Matrix (Accuracy: {accuracy:.2f}%)')
-    plt.savefig(Path('reports/figures/confusion_matrix.png'), dpi=300)
+    plt.savefig(Path('images/figures/confusion_matrix.png'), dpi=300)
     plt.close()
-    print("✓ Confusion matrix saved: reports/figures/confusion_matrix.png")
+    print("✓ Confusion matrix saved: images/figures/confusion_matrix.png")
 
 if __name__ == "__main__":
     evaluate()
