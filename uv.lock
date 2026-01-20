@@ -2339,7 +2339,6 @@ requires-dist = [
     { name = "kaggle", specifier = ">=1.8.3" },
     { name = "matplotlib", specifier = ">=3.10.8" },
     { name = "numpy", specifier = "==2.4.1" },
-    { name = "numpy", specifier = "==2.4.1" },
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "scikit-learn", specifier = ">=1.8.0" },
     { name = "seaborn", specifier = ">=0.13.2" },
