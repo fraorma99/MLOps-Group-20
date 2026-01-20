@@ -43,7 +43,7 @@ ENV PYTHONPATH=src
 
 VOLUME ["/app/wandb", "/app/models"]
 
-# FIXED: Use python directly (venv has everything)
+#Use python directly (venv has everything)
 ENTRYPOINT ["/app/.venv/bin/python", "-m", "mlops_group_20.train"]
 CMD ["--config-name", "sweep", "--multirun", \
      "optimizer.lr=0.001,0.0015,0.002", \

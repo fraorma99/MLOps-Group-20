@@ -10,11 +10,14 @@ hydra:
     dir: multirun/${now:%Y-%m-%d_%H-%M-%S}
     subdir: ${hydra.job.num}
 
+# Global reproducibility seed
+seed: 42
+
 #data-related configuration
 data:
   path: data/processed/processed.pkl
   splits_dir: data/splits
-  seed: 42
+  seed: ${seed}
   split:
     #Equivalent to test_size=0.3, then split remaining 0.3 equally into val/test
     train_size: 0.7

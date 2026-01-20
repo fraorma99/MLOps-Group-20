@@ -307,7 +307,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- We made use of config files on Hydra. When an experiment is run it saves the metadata under multirun/ for reproducibility. To use the exact Hydra sweep config saves with the run go to the multirun folder and under the timestamp/multirun.yaml and subfolder 0/hydra/config.yaml and use it by python [train.py](http://_vscodecontentref_/1) --config-path multirun/<timestamp>/0/.hydra --config-name config in the terminal. We also saved the splits in our data in data/processed/splits/ so that the data is split the same time each run. Seeds are set in config data.seed to keep tokenization and splits and model init. Metrics and artifacts are saved to disk and W&B logs the metrics from torchmetrics.---
+--- We made use of config files on Hydra. When an experiment is run it saves the metadata under multirun/ for reproducibility. To use the exact Hydra sweep config saves with the run go to the multirun folder and under the timestamp/multirun.yaml and subfolder 0/hydra/config.yaml and use it by python [train.py](http://_vscodecontentref_/1) --config-path multirun/<timestamp>/0/.hydra --config-name config in the terminal. We also saved the splits in our data in data/processed/splits/ so that the data is split the same time each run. Seeds are set in config data.seed to keep tokenization and splits and model init. Metrics and artifacts are saved to disk and W&B logs the metrics from torchmetrics. Additionally in the config file we add global seed of 42, and make sure torch/numpy/random/CuDNN use the global seed. ---
 
 ### Question 14
 

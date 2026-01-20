@@ -3,6 +3,8 @@ import torch.nn as nn
 import pandas as pd
 import hydra
 import wandb
+import random
+import numpy as np
 from pathlib import Path
 from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
@@ -12,6 +14,27 @@ from torchmetrics import Accuracy, Precision, Recall, F1Score
 
 from mlops_group_20.model import LanguageClassifier
 from mlops_group_20.data import Vocabulary, TextDataset, simple_tokenizer
+
+
+def set_seed(seed: int) -> None:
+    """Set seeds across libraries and enforce deterministic behavior where possible."""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+    # Favor determinism over speed; warn_only avoids hard errors on backends without support.
+    torch.use_deterministic_algorithms(True, warn_only=True)
+    if torch.backends.cudnn.is_available():
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+
+
+def seed_worker(worker_id: int) -> None:
+    """Ensure each DataLoader worker has a distinct but deterministic seed."""
+    worker_seed = (torch.initial_seed() + worker_id) % 2**32
+    np.random.seed(worker_seed)
+    random.seed(worker_seed)
 
 #pr = cProfile.Profile()
 
@@ -45,7 +68,7 @@ def train(cfg: DictConfig):
     splits_dir.mkdir(parents=True, exist_ok=True)
     pd.to_pickle({'label2idx': label2idx, 'idx2label': idx2label}, splits_dir / "label_mappings.pkl")
 
-    torch.manual_seed(cfg.data.seed)  # For reproducibility
+    set_seed(int(cfg.seed))  # For reproducibility
     
     # Compute split sizes from config
     train_size = float(cfg.data.split.train_size)
@@ -59,7 +82,7 @@ def train(cfg: DictConfig):
         range(len(data)),
         test_size=(1.0 - train_size),
         stratify=data[cfg.data.split.stratify_column],
-        random_state=cfg.data.seed,
+        random_state=cfg.seed,
     )
     
     # Second split: val vs test within temp
@@ -71,7 +94,7 @@ def train(cfg: DictConfig):
         temp_idx,
         test_size=test_ratio_in_temp,
         stratify=data.iloc[temp_idx][cfg.data.split.stratify_column],
-        random_state=cfg.data.seed,
+        random_state=cfg.seed,
     )
     
     # Save indices for evaluate/visualize
@@ -111,8 +134,22 @@ def train(cfg: DictConfig):
     
     # Create dataloaders
     batch_size = int(cfg.training.batch_size)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size)
+    g = torch.Generator()
+    g.manual_seed(int(cfg.seed))
+    train_loader = DataLoader(
+        train_dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        worker_init_fn=seed_worker,
+        generator=g,
+    )
+    val_loader = DataLoader(
+        val_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        worker_init_fn=seed_worker,
+        generator=g,
+    )
     
     # Initialize model
     # Device selection
