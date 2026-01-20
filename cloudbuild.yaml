@@ -1,0 +1,42 @@
+steps:
+  # Build + push TRAIN image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-f",
+        "dockerfiles/train.dockerfile",
+        "-t",
+        "europe-west1-docker.pkg.dev/${PROJECT_ID}/mlops-images/train:${SHORT_SHA}",
+        ".",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "europe-west1-docker.pkg.dev/${PROJECT_ID}/mlops-images/train:${SHORT_SHA}",
+      ]
+
+  # Build + push API image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-f",
+        "dockerfiles/api.dockerfile",
+        "-t",
+        "europe-west1-docker.pkg.dev/${PROJECT_ID}/mlops-images/api:${SHORT_SHA}",
+        ".",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "europe-west1-docker.pkg.dev/${PROJECT_ID}/mlops-images/api:${SHORT_SHA}",
+      ]
+
+images:
+  - "europe-west1-docker.pkg.dev/${PROJECT_ID}/mlops-images/train:${SHORT_SHA}"
+  - "europe-west1-docker.pkg.dev/${PROJECT_ID}/mlops-images/api:${SHORT_SHA}"
+options:
+  logging: CLOUD_LOGGING_ONLY

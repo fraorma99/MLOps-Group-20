@@ -1,0 +1,34 @@
+name: Data changes workflow
+
+on:
+  push:
+    branches: [main, Raulito]
+    paths:
+      - "scripts/download_data.sh"
+  pull_request:
+    branches: [main, Raulito]
+    paths:
+      - "scripts/download_data.sh"
+
+jobs:
+  run_data_checker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup uv + Python
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.12"
+          enable-cache: true
+
+      - name: Install dependencies
+        run: |
+          uv sync
+          pip list
+
+      - name: Download data
+        run: |
+          bash scripts/download_data.sh

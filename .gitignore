@@ -193,3 +193,8 @@ reports/figures/
 #Ignore experiment tracking logs (for now)
 wandb/
 multirun/
+
+
+#Ignore experiment tracking logs (for now)
+wandb/
+multirun/

@@ -19,7 +19,7 @@ We will integrate these key frameworks:
 
 **3. Data**
 
-We will use the "Language Detection" dataset available on Kaggle. 
+We will use the "Language Detection" dataset available on Kaggle.
 
 https://www.kaggle.com/datasets/basilb2s/language-detection
 

@@ -22,7 +22,7 @@ COPY configs/ configs/
 # Copy source code, data, and metadata
 COPY src/ src/
 COPY data/ data/
-COPY README.md LICENSE ./ 
+COPY README.md LICENSE ./
 
 # Install the local project module
 RUN uv pip install -e .
