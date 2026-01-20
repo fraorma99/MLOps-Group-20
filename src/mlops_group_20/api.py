@@ -23,29 +23,33 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.ba
 def load_artifacts():
     """Load model and metadata on startup."""
     global model, vocab, idx2label
-
+    
     try:
         # Resolve paths relative to project root
         project_root = Path(__file__).parent.parent.parent
         splits_dir = project_root / "data" / "splits"
         models_dir = project_root / "models"
-
+        
         # Load mappings and vocab
         label_mappings_path = splits_dir / "label_mappings.pkl"
         vocab_path = splits_dir / "vocab.pkl"
-
+        
         if not label_mappings_path.exists():
             raise FileNotFoundError(f"Label mappings not found at {label_mappings_path}")
         if not vocab_path.exists():
             raise FileNotFoundError(f"Vocabulary not found at {vocab_path}")
-
+        
         label_info = pd.read_pickle(label_mappings_path)
         idx2label = label_info['idx2label']
-        vocab = pd.read_pickle("data/splits/vocab.pkl")
-
+        vocab = pd.read_pickle(vocab_path)
+        
         # Load model checkpoint
-        checkpoint = torch.load("models/best_model.pt", map_location=device)
-
+        model_path = models_dir / "best_model.pt"
+        if not model_path.exists():
+            raise FileNotFoundError(f"Model checkpoint not found at {model_path}")
+        
+        checkpoint = torch.load(model_path, map_location=device)
+        
         # Initialize and load model state
         model = LanguageClassifier(
             vocab_size=checkpoint['vocab_size'],
@@ -231,22 +235,22 @@ def ui():
         <div class="container">
             <h1>🌍 Language Detector</h1>
             <p class="subtitle">Enter text below to detect its language</p>
-
+            
             <textarea id="textInput" placeholder="Type or paste any text here..."></textarea>
             <p class="example">Try: "Hello, how are you?" or "Bonjour, comment allez-vous?"</p>
-
+            
             <div class="languages">
                 <div class="languages-title">✨ Supported Languages:</div>
                 <div class="languages-list" id="languagesList">Loading...</div>
             </div>
-
+            
             <button onclick="detectLanguage()">Detect Language</button>
-
+            
             <div id="result" class="result">
                 <div class="language" id="language"></div>
                 <div class="confidence" id="confidence"></div>
             </div>
-
+            
             <div id="error" class="error"></div>
         </div>
 
@@ -258,8 +262,8 @@ def ui():
                     const data = await response.json();
                     const languages = data.supported_languages;
                     const listDiv = document.getElementById('languagesList');
-
-                    listDiv.innerHTML = languages.map(lang =>
+                    
+                    listDiv.innerHTML = languages.map(lang => 
                         `<span class="language-tag">${lang}</span>`
                     ).join('');
                 } catch (error) {
@@ -267,29 +271,29 @@ def ui():
                     document.getElementById('languagesList').textContent = 'Failed to load languages';
                 }
             }
-
+            
             // Load languages when page loads
             window.addEventListener('load', loadLanguages);
-
+            
             async function detectLanguage() {
                 const text = document.getElementById('textInput').value.trim();
                 const resultDiv = document.getElementById('result');
                 const errorDiv = document.getElementById('error');
                 const button = document.querySelector('button');
-
+                
                 // Hide previous results
                 resultDiv.classList.remove('show');
                 errorDiv.classList.remove('show');
-
+                
                 if (!text) {
                     errorDiv.textContent = 'Please enter some text first!';
                     errorDiv.classList.add('show');
                     return;
                 }
-
+                
                 button.disabled = true;
                 button.textContent = 'Detecting...';
-
+                
                 try {
                     const response = await fetch('/predict', {
                         method: 'POST',
@@ -298,18 +302,18 @@ def ui():
                         },
                         body: JSON.stringify({ text: text })
                     });
-
+                    
                     if (!response.ok) {
                         throw new Error('Failed to detect language');
                     }
-
+                    
                     const data = await response.json();
-
+                    
                     document.getElementById('language').textContent = data.predicted_language;
-                    document.getElementById('confidence').textContent =
+                    document.getElementById('confidence').textContent = 
                         data.confidence ? `Confidence: ${(data.confidence * 100).toFixed(1)}%` : '';
                     resultDiv.classList.add('show');
-
+                    
                 } catch (error) {
                     errorDiv.textContent = 'Error: ' + error.message;
                     errorDiv.classList.add('show');
@@ -318,7 +322,7 @@ def ui():
                     button.textContent = 'Detect Language';
                 }
             }
-
+            
             // Allow Enter key to submit (with Shift+Enter for new line)
             document.getElementById('textInput').addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
@@ -337,23 +341,23 @@ def predict(request: TextRequest):
     """Predict the language of the input text."""
     if not request.text:
         raise HTTPException(status_code=400, detail="Text is empty")
-
+    
     # Preprocess the input text
     tokens = simple_tokenizer(request.text)[:200]
     indices = [vocab[token] for token in tokens]
-
+    
     # Padding
     if len(indices) < 200:
         indices += [0] * (200 - len(indices))
-
+        
     input_tensor = torch.tensor([indices], dtype=torch.long).to(device)
-
+    
     # Inference
     with torch.no_grad():
         outputs = model(input_tensor)
         _, predicted_idx = outputs.max(1)
         prediction = idx2label[predicted_idx.item()]
-
+    
     return {
         "input_text": request.text,
         "predicted_language": prediction,
