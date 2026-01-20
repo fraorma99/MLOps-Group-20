@@ -108,6 +108,7 @@ If you just want to test the language detection API without running training:
 **1. Run the API container** (no setup needed):
 ```bash
 docker login
+docker pull --platform linux/amd64 kenzodtu/mlops-api:latest
 docker run -d --name mlops-api -p 8000:8000 kenzodtu/mlops-api:latest
 ```
 
