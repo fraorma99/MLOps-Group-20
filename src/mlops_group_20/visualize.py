@@ -30,11 +30,11 @@ plt.title('Final Performance')
 plt.ylabel('Accuracy %')
 
 plt.tight_layout()
-plt.savefig('reports/figures/training_curves.png', dpi=300, bbox_inches='tight')
+plt.savefig('images/figures/training_curves.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 #Display the confusion matrix image
-confusion_matrix_path = Path('reports/figures/confusion_matrix.png')
+confusion_matrix_path = Path('images/figures/confusion_matrix.png')
 if confusion_matrix_path.exists():
     if sys.platform == 'darwin':  # macOS
         subprocess.run(['open', str(confusion_matrix_path)])
