@@ -41,53 +41,92 @@ Evolution: As the project progresses, we may investigate "data drifting" by intr
 The directory structure of the project looks like this:
 ```txt
 MLOps-Group-20/
-├── .devcontainer/           # Isolated development setup
-├── .github/                 # CI/CD workflows
+├── .devcontainer/           # Dev environment setup
+│   ├── devcontainer.json
+│   └── post_create.sh
+├── .dvc/                    # Data versioning config
+│   ├── .gitignore
+│   └── config
+├── .github/                 # Automation and CI/CD
+│   ├── dependabot.yaml
 │   └── workflows/
-│       └── tests.yaml       # Automated pytest execution
-├── configs/                 # Hydra configuration files
-│   └── config.yaml          # Main experiment config
-├── data/                    # Data storage directory
-│   ├── processed/           # Final processed dataset
-│   ├── raw/                 # Original CSV files
-│   └── splits/              # Vocab and mappings
+│       ├── data_changes.yaml
+│       ├── linting.yaml
+│       ├── model_changes.yaml
+│       └── tests.yaml
+├── configs/                 # Hydra and Sweeps
+│   ├── config.yaml
+│   └── sweep.yaml
+├── data/                    # Data management
+│   ├── processed/           # Processed data files
+│   │   ├── processed.pkl
+│   │   └── splits/          # Data split indices
+│   │       ├── test_indices.pkl
+│   │       ├── train_indices.pkl
+│   │       └── val_indices.pkl
+│   ├── raw/                 # Original dataset files
+│   │   └── language_detection.csv
+│   ├── splits/              # Metadata and vocab
+│   │   ├── label_mappings.pkl
+│   │   ├── split_info.pkl
+│   │   └── vocab.pkl
+│   └── raw.dvc              # DVC data pointer
 ├── dockerfiles/             # Container recipes
-│   ├── api.dockerfile       # FastAPI service image
-│   └── train.dockerfile     # Training environment image
-├── docs/                    # Project documentation
+│   ├── api.dockerfile
+│   └── train.dockerfile
+├── docs/                    # Technical documentation
 │   ├── mkdocs.yml
+│   ├── README.md
 │   └── source/
-├── images/                  # Generated visual assets
-│   └── figures/             # Performance plots (M14)
-├── models/                  # Trained model artifacts
-│   ├── best_model.pt        # Top-performing weights
-│   └── training_history.pt  # Historical training logs
+│       └── index.md
+├── images/                  # Project visual assets
+│   └── figures/             # Training plots (M14)
+├── models/                  # Model artifacts
+│   ├── best_model.pt
+│   └── training_history.pt
 ├── multirun/                # Hydra multirun logs
-├── notebooks/               # Experimental Jupyter notebooks
-├── outputs/                 # Single run outputs
-├── reports/                 # Project reports
-│   └── figures/
-├── scripts/                 # Utility shell scripts
+├── notebooks/               # Exploratory Jupyter notebooks
+├── outputs/                 # Hydra run logs
+├── reports/                 # Compliance and Cloud reports
+│   ├── reports.py
+│   ├── README.md
+│   └── figures/             # GCP and WandB screenshots
+│       ├── bucket.png, build.png, overview.png, registry.png
+│       └── wandb.png, wandb_train.png, wandb_val.png
+├── scripts/                 # Automation utility scripts
 │   ├── download_data.sh
 │   └── setup.sh
-├── src/                     # Source code package
-│   └── mlops_group_20/
-│       ├── api.py           # FastAPI endpoint
-│       ├── data.py          # Preprocessing logic
-│       ├── evaluate.py      # Test set evaluation
-│       ├── model.py         # Neural network architecture
-│       ├── train.py         # Main training loop
-│       └── visualize.py     # Metrics plotting
-├── tests/                   # Automated unit tests
+├── src/mlops_group_20/      # Main Python package
+│   ├── __init__.py
+│   ├── api.py
+│   ├── data.py
+│   ├── evaluate.py
+│   ├── model.py
+│   ├── train.py
+│   └── visualize.py
+├── tests/                   # Testing suite (Pytest)
+│   ├── __init__.py
+│   ├── test_api.py
 │   ├── test_data.py
 │   └── test_model.py
-├── wandb/                   # WandB local logs
+├── wandb/                   # Local WandB cache
 │
-├── .dvc/                    # Data versioning metadata
-├── cloudbuild.yaml          # Google Cloud build
-├── docker-compose.yml       # Multi-container orchestration
+├── .dockerignore            # Docker exclusion rules
+├── .dvcignore               # DVC exclusion rules
+├── .env.example             # Template for secrets
+├── .env 2.example           # Alternative secret template
+├── .gitignore               # Git exclusion rules
+├── .pre-commit-config.yaml  # Pre-push code quality
+├── .python-version          # Project Python version
+├── Dockerfile               # Root Docker recipe
+├── LICENSE                  # Project legal license
+├── README.md                # Project main documentation
+├── cloudbuild.yaml          # GCP build pipeline
+├── docker-compose.yml       # Service orchestration
+├── profile.prof             # Training profile data
 ├── pyproject.toml           # Project dependencies (UV)
-└── uv.lock                  # Dependency lock file
+├── tasks.py                 # Project task runner
+└── uv.lock                  # Deterministic dependency lock
 ```
 
 
