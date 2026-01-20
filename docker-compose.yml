@@ -1,5 +1,6 @@
 services:
   trainer:
+    platform: linux/amd64
     image: kenzodtu/mlops-group-20-trainer:latest
     container_name: mlops-trainer
     volumes:
@@ -12,8 +13,11 @@ services:
       - WANDB_PROJECT=${WANDB_PROJECT}
     stdin_open: true
     tty: true
+    networks:
+      - mlops-network
 
   api:
+    platform: linux/amd64
     image: kenzodtu/mlops-api:latest
     container_name: mlops-api
     ports:
@@ -21,9 +25,24 @@ services:
     volumes:
       - ./models:/app/models:ro
       - ./data/splits:/app/data/splits:ro
+    networks:
+      - mlops-network
     depends_on:
       - trainer
 
+  # Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: mlops-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - mlops-network
+    depends_on:
+      - api
+
 networks:
-  default:
+  mlops-network:
     driver: bridge

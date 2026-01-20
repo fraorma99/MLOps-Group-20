@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
+from prometheus_fastapi_instrumentator import Instrumentator
 import torch
 from pathlib import Path
 import pandas as pd
@@ -8,6 +9,7 @@ from mlops_group_20.model import LanguageClassifier
 from mlops_group_20.data import simple_tokenizer
 
 app = FastAPI(title="Language Detection API")
+Instrumentator().instrument(app).expose(app)
 
 # Define the request body structure
 class TextRequest(BaseModel):
