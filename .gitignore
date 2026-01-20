@@ -176,9 +176,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 code .gitignore  # Edit → paste at bottom:
-# Data (large files)
-#data/
-reports/figures/*.png
+
 
 # --- MLOps Specifics ---
 #Models and split artifacts should be tracked for deployment
@@ -186,9 +184,6 @@ reports/figures/*.png
 # Ignore all raw and processed data
 #data/raw/
 data/processed/
-
-# Ignore all generated figures
-reports/figures/
 
 #Ignore experiment tracking logs (for now)
 wandb/
