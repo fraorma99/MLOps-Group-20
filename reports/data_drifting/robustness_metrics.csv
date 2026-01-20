@@ -1,0 +1,6 @@
+scenario,accuracy,macro_f1,avg_oov_rate,report_html
+baseline,0.94,0.13843888070692195,0.0,reports/data_drifting/evidently_baseline.html
+codeswitch,0.96,0.19591836734693877,0.0,reports/data_drifting/evidently_codeswitch.html
+emoji_url,0.965,0.1964376590330789,0.0,reports/data_drifting/evidently_emoji_url.html
+short,0.785,0.09772798008092126,0.0,reports/data_drifting/evidently_short.html
+typos,0.91,0.13612565445026178,0.0,reports/data_drifting/evidently_typos.html

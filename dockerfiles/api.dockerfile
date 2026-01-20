@@ -22,6 +22,8 @@ COPY configs/ configs/
 # Copy the source code and necessary artifacts
 COPY src/ src/
 COPY models/ models/
+COPY data/ data/
+
 # Metadata files are required for the local package installation
 COPY README.md LICENSE ./
 
