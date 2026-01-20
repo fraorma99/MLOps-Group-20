@@ -1,14 +1,12 @@
-import pickle
 from pathlib import Path
 import pandas as pd
 import torch
-import torch.nn as nn
-from sklearn.metrics import classification_report, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.metrics import confusion_matrix
 
 from mlops_group_20.model import LanguageClassifier
-from mlops_group_20.data import Vocabulary, TextDataset, simple_tokenizer
+from mlops_group_20.data import TextDataset, simple_tokenizer
 
 def evaluate():
     # Load the data the same way as train such that we can test on unseen test data
@@ -51,7 +49,7 @@ def evaluate():
             all_labels.extend(labels.cpu().numpy())
 
     # Metrics and Confusion Matrix (Keeping your original logic)
-    accuracy = 100 * sum(p == l for p, l in zip(all_preds, all_labels)) / len(all_labels)
+    accuracy = 100 * sum(p == label for p, label in zip(all_preds, all_labels)) / len(all_labels)
     print(f"Test Accuracy: {accuracy:.2f}%")
 
     plt.figure(figsize=(12, 10))

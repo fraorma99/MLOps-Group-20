@@ -1,14 +1,12 @@
-import pickle
-from pathlib import Path
-import pandas as pd
-import numpy as np
 import torch
 import torch.nn as nn
+import pandas as pd
+import hydra
+import wandb
+from pathlib import Path
 from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
-import hydra
 from omegaconf import DictConfig, OmegaConf
-import wandb
 from torchmetrics import Accuracy, Precision, Recall, F1Score
 #import cProfile - done profiling
 
@@ -98,14 +96,14 @@ def train(cfg: DictConfig):
     # Create datasets
     train_dataset = TextDataset(
         train_data['Text'].tolist(),
-        [label2idx[l] for l in train_data['Language']],
+        [label2idx[lang] for lang in train_data['Language']],
         vocab,
         tokenizer,
         max_len=cfg.data.max_len,
     )
     val_dataset = TextDataset(
         val_data['Text'].tolist(),
-        [label2idx[l] for l in val_data['Language']],
+        [label2idx[lang] for lang in val_data['Language']],
         vocab,
         tokenizer,
         max_len=cfg.data.max_len,
@@ -233,8 +231,10 @@ def train(cfg: DictConfig):
         if scheduler is not None:
             scheduler.step(avg_val_loss)
 
-        train_losses.append(avg_train_loss); val_losses.append(avg_val_loss)
-        train_accs.append(train_acc); val_accs.append(val_acc)
+        train_losses.append(avg_train_loss)
+        val_losses.append(avg_val_loss)
+        train_accs.append(train_acc)
+        val_accs.append(val_acc)
         
         print(f"Epoch {epoch+1}/{num_epochs}: Train Loss: {avg_train_loss:.4f}, Train Acc: {train_acc:.2f}%, Prec: {train_precision:.2f}%, Rec: {train_recall:.2f}%, F1: {train_f1:.2f}% | Val Loss: {avg_val_loss:.4f}, Val Acc: {val_acc:.2f}%, Prec: {val_precision:.2f}%, Rec: {val_recall:.2f}%, F1: {val_f1:.2f}%")
         # W&B logging
@@ -271,15 +271,18 @@ def train(cfg: DictConfig):
                 artifact.add_file(str(best_model_path))
                 wandb.log_artifact(artifact)
 
-    # Save training history
+    
     # Save training history
     history_path = Path(cfg.training.save_history_to)
     history_path.parent.mkdir(parents=True, exist_ok=True)
     torch.save({
         'epochs': list(range(1, num_epochs + 1)),
-        'train_losses': train_losses, 'val_losses': val_losses,
-        'train_accs': train_accs, 'val_accs': val_accs,
-        'final_train_acc': train_accs[-1], 'final_val_acc': val_accs[-1]
+        'train_losses': train_losses,
+        'val_losses': val_losses,
+        'train_accs': train_accs,
+        'val_accs': val_accs,
+        'final_train_acc': train_accs[-1],
+        'final_val_acc': val_accs[-1]
     }, history_path)
 
     if cfg.wandb.enabled:
