@@ -3,8 +3,8 @@
 #Stage: pull Prometheus binary and consoles
 FROM prom/prometheus:latest AS prom
 
-#Final image: API + Prometheus (use remote API image)
-FROM kenzodtu/mlops-api:latest
+#Final image: API + Prometheus (use the new image with metrics support)
+FROM kenzodtu/mlops-prometheus:latest
 
 WORKDIR /app
 
@@ -23,5 +23,21 @@ EXPOSE 8000 9090
 #Enable metrics by default in this combined image
 ENV ENABLE_METRICS=true
 
-# Start API in background, then run Prometheus in foreground
-CMD ["sh", "-c", "uv run uvicorn mlops_group_20.api:app --host 0.0.0.0 --port 8000 & exec /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.listen-address=:9090"]
+# Create a startup script that runs both services
+RUN cat > /start.sh << 'EOF'
+#!/bin/sh
+# Start API in background with metrics enabled using uv run
+uv run uvicorn mlops_group_20.api:app --host 0.0.0.0 --port 8000 &
+API_PID=$!
+
+# Wait a moment for API to start
+sleep 3
+
+# Start Prometheus in foreground
+exec /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.listen-address=:9090
+EOF
+RUN chmod +x /start.sh
+
+# Override entrypoint and use our startup script
+ENTRYPOINT []
+CMD ["/start.sh"]
