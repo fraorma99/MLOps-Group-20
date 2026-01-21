@@ -1,18 +1,4 @@
 services:
-  trainer:
-    image: kenzodtu/mlops-group-20-trainer:latest
-    container_name: mlops-trainer
-    volumes:
-      - ./models:/app/models
-      - ./outputs:/app/outputs
-      - ./wandb:/app/wandb
-    environment:
-      - WANDB_API_KEY=${WANDB_API_KEY}
-      - WANDB_ENTITY=${WANDB_ENTITY}
-      - WANDB_PROJECT=${WANDB_PROJECT}
-    stdin_open: true
-    tty: true
-
   api:
     image: kenzodtu/mlops-api:latest
     container_name: mlops-api
@@ -23,8 +9,6 @@ services:
       - ./data/splits:/app/data/splits:ro
     environment:
       - ENABLE_METRICS=${ENABLE_METRICS:-false}
-    depends_on:
-      - trainer
 
   prometheus:
     image: prom/prometheus:latest
