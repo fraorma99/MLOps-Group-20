@@ -9,7 +9,8 @@ from mlops_group_20.model import LanguageClassifier
 from mlops_group_20.data import simple_tokenizer
 
 app = FastAPI(title="Language Detection API")
-Instrumentator().instrument(app).expose(app)
+instrumentator = Instrumentator()
+instrumentator.instrument(app).expose(app, endpoint="/metrics")
 
 # Define the request body structure
 class TextRequest(BaseModel):

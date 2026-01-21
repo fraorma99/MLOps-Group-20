@@ -17,8 +17,7 @@ services:
       - mlops-network
 
   api:
-    platform: linux/amd64
-    image: kenzodtu/mlops-api:latest
+    image: francescoorma/mlops-api:latest
     container_name: mlops-api
     ports:
       - "8000:8000"
