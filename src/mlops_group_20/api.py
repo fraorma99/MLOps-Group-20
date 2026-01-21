@@ -1,4 +1,6 @@
-from fastapi import FastAPI, HTTPException
+import os
+import time
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import torch
@@ -6,6 +8,53 @@ from pathlib import Path
 import pandas as pd
 from mlops_group_20.model import LanguageClassifier
 from mlops_group_20.data import simple_tokenizer
+from typing import Optional
+
+# Optional Prometheus instrumentation (enabled via ENABLE_METRICS=true)
+ENABLE_METRICS = os.getenv("ENABLE_METRICS", "false").lower() == "true"
+if ENABLE_METRICS:
+    try:
+        from prometheus_client import (
+            Counter,
+            Gauge,
+            Histogram,
+            CONTENT_TYPE_LATEST,
+            generate_latest,
+        )
+
+        REQUESTS_TOTAL = Counter(
+            "api_requests_total",
+            "Total HTTP requests",
+            ["method", "endpoint", "http_status"],
+        )
+        REQUEST_LATENCY = Histogram(
+            "api_request_latency_seconds",
+            "Latency of HTTP requests in seconds",
+            ["endpoint"],
+            buckets=(0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0),
+        )
+        PREDICTIONS_TOTAL = Counter(
+            "api_predictions_total",
+            "Total number of predictions made",
+            ["language"],
+        )
+        INFERENCE_LATENCY = Histogram(
+            "api_inference_latency_seconds",
+            "Model inference latency in seconds",
+            buckets=(0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0),
+        )
+        INPUT_TEXT_LENGTH = Histogram(
+            "api_input_text_length",
+            "Length of input text (characters)",
+            buckets=(0, 20, 50, 100, 200, 400, 800, 1600),
+        )
+        MODEL_LOADED = Gauge(
+            "api_model_loaded",
+            "Whether the model is loaded successfully (1 yes, 0 no)",
+        )
+    except Exception:
+        # If prometheus_client isn't available, disable metrics gracefully
+        ENABLE_METRICS = False
 
 app = FastAPI(title="Language Detection API")
 
@@ -64,9 +113,37 @@ def load_artifacts():
         model.eval()
         print(f"✓ Model and artifacts loaded successfully on {device}")
         print(f"✓ Supported languages: {list(idx2label.values())}")
+        if ENABLE_METRICS:
+            try:
+                MODEL_LOADED.set(1)
+            except Exception:
+                pass
     except Exception as e:
         print(f"Error loading model: {e}")
+        if ENABLE_METRICS:
+            try:
+                MODEL_LOADED.set(0)
+            except Exception:
+                pass
         raise RuntimeError("Model artifacts not found. Please run training first.")
+
+# Lightweight HTTP metrics middleware (only when enabled)
+if ENABLE_METRICS:
+    @app.middleware("http")
+    async def metrics_middleware(request, call_next):
+        start = time.perf_counter()
+        response = await call_next(request)
+        try:
+            elapsed = time.perf_counter() - start
+            endpoint = request.url.path
+            REQUESTS_TOTAL.labels(
+                method=request.method, endpoint=endpoint, http_status=str(response.status_code)
+            ).inc()
+            REQUEST_LATENCY.labels(endpoint=endpoint).observe(elapsed)
+        except Exception:
+            # Never let metrics break the API
+            pass
+        return response
 
 @app.get("/")
 def root():
@@ -341,6 +418,16 @@ def ui():
     """
     return HTMLResponse(content=html_content)
 
+# Expose Prometheus metrics endpoint when enabled
+if ENABLE_METRICS:
+    @app.get("/metrics")
+    def metrics() -> Response:
+        try:
+            return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+        except Exception:
+            # Fallback empty response if something goes wrong
+            return Response(status_code=500)
+
 @app.post("/predict")
 def predict(request: TextRequest):
     """Predict the language of the input text."""
@@ -348,6 +435,12 @@ def predict(request: TextRequest):
         raise HTTPException(status_code=400, detail="Text is empty")
     
     # Preprocess the input text
+    if ENABLE_METRICS:
+        try:
+            INPUT_TEXT_LENGTH.observe(len(request.text))
+        except Exception:
+            pass
+
     tokens = simple_tokenizer(request.text)[:200]
     indices = [vocab[token] for token in tokens]
     
@@ -358,10 +451,18 @@ def predict(request: TextRequest):
     input_tensor = torch.tensor([indices], dtype=torch.long).to(device)
     
     # Inference
+    if ENABLE_METRICS:
+        inf_start = time.perf_counter()
     with torch.no_grad():
         outputs = model(input_tensor)
         _, predicted_idx = outputs.max(1)
         prediction = idx2label[predicted_idx.item()]
+    if ENABLE_METRICS:
+        try:
+            INFERENCE_LATENCY.observe(time.perf_counter() - inf_start)
+            PREDICTIONS_TOTAL.labels(language=str(prediction)).inc()
+        except Exception:
+            pass
     
     return {
         "input_text": request.text,

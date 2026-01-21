@@ -199,6 +199,19 @@ This will:
 - API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 - Health check: `curl http://localhost:8000/health`
 
+## 📈 Monitoring (Prometheus)
+
+Prometheus metrics are integrated and disabled by default to avoid any overhead. Enable and run via docker-compose:
+
+```bash
+ENABLE_METRICS=true docker compose up -d api prometheus
+```
+
+- Prometheus UI: http://localhost:9090
+- Metrics endpoint (when enabled): http://localhost:8000/metrics
+
+Scrape config is defined in [prometheus.yml](prometheus.yml) to target the `api` service at `api:8000/metrics` inside the compose network.
+
 **4. Make predictions** (command line):
 ```bash
 curl -X POST "http://localhost:8000/predict" \

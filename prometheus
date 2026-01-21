@@ -1,0 +1,46 @@
+# syntax=docker/dockerfile:1
+
+# Stage: pull Prometheus binary and consoles
+FROM prom/prometheus:latest AS prom
+
+# Final image: API + Prometheus
+FROM python:3.12-slim
+
+# Install 'uv' from the official image
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+ENV UV_PYTHON_PREFERENCE=only-system
+
+WORKDIR /app
+
+# Copy Prometheus binary and console assets
+COPY --from=prom /bin/prometheus /bin/prometheus
+# Console assets may not be present on all variants; not required for basic UI
+
+# rometheus config (scrapes localhost:8000 inside this container)
+COPY prometheus.single.yml /etc/prometheus/prometheus.yml
+
+#Copy dependency files first for better caching
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev --no-install-project
+
+#Copy app code and artifacts
+COPY configs/ configs/
+COPY src/ src/
+COPY models/ models/
+COPY data/splits/ data/splits/
+COPY README.md LICENSE ./
+
+#Install project
+RUN uv pip install -e .
+
+#Install prometheus-client only in this image to enable metrics
+RUN uv pip install prometheus-client
+
+# Expose both ports: 8000 (API) and 9090 (Prometheus UI)
+EXPOSE 8000 9090
+
+# Enable metrics by default in this combined image
+ENV ENABLE_METRICS=true
+
+# Start API in background, then run Prometheus in foreground
+CMD ["sh", "-c", "uv run uvicorn mlops_group_20.api:app --host 0.0.0.0 --port 8000 & exec /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.listen-address=:9090"]
