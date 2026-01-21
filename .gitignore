@@ -193,3 +193,13 @@ multirun/
 #Ignore experiment tracking logs (for now)
 wandb/
 multirun/
+
+# Generated reports / artifacts
+reports/data_drifting/
+outputs/
+
+# Experiment tracking
+wandb/
+
+# Local backups
+models/backup/
