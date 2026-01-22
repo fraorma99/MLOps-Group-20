@@ -68,7 +68,9 @@ def train(cfg: DictConfig):
     splits_dir.mkdir(parents=True, exist_ok=True)
     pd.to_pickle({'label2idx': label2idx, 'idx2label': idx2label}, splits_dir / "label_mappings.pkl")
 
-    set_seed(int(cfg.seed))  # For reproducibility
+    # Use a safe default if cfg.seed is missing (e.g., in smoke tests)
+    seed_value = int(getattr(cfg, "seed", 42))
+    set_seed(seed_value)  # For reproducibility
 
     # Compute split sizes from config
     train_size = float(cfg.data.split.train_size)
@@ -82,7 +84,7 @@ def train(cfg: DictConfig):
         range(len(data)),
         test_size=(1.0 - train_size),
         stratify=data[cfg.data.split.stratify_column],
-        random_state=cfg.seed,
+        random_state=seed_value,
     )
 
     # Second split: val vs test within temp
@@ -94,7 +96,7 @@ def train(cfg: DictConfig):
         temp_idx,
         test_size=test_ratio_in_temp,
         stratify=data.iloc[temp_idx][cfg.data.split.stratify_column],
-        random_state=cfg.seed,
+        random_state=seed_value,
     )
 
     # Save indices for evaluate/visualize
@@ -135,7 +137,7 @@ def train(cfg: DictConfig):
     # Create dataloaders
     batch_size = int(cfg.training.batch_size)
     g = torch.Generator()
-    g.manual_seed(int(cfg.seed))
+    g.manual_seed(seed_value)
     train_loader = DataLoader(
         train_dataset,
         batch_size=batch_size,

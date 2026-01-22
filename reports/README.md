@@ -307,7 +307,7 @@ In larger projects, these concepts are essential because they prevent "merge hel
 >
 > Answer:
 
---- We configured our experiments with Hydra configs using config.yaml. For sweeps we used Hydra multirun.  ---
+--- We configured our experiments with Hydra configs using config.yaml. For sweeps we used Hydra multirun and configuring a variety of different learning rates as the hyperparameter. The method for configuring experiments using Hydra is changing the hard coded hyperparameters to call for the config.yaml such that you can change the config.yaml file instead of having to find every hyperparameter and changing it one by one. This also eased the process for running sweeps of hyperparameters because you can use the --multirun command instead of changing the hard coded hyperparameter and saving each run and comparing at the end. In theory any hyperparameter could be swept but would require a lot of training time, so we changed the learning rate as our data set had even splits with good variety in data and researched that if validation accuracy is higher than training accuracy it could be a fault in the learning rate. Example:  uv run python -m mlops_group_20.train -m --config-path configs --config-name config optimizer.lr=0.001,0.0015,0.002 ---
 
 ### Question 13
 
