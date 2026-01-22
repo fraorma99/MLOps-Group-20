@@ -598,8 +598,24 @@ Transitioning to uv for dependency management also required a pivot in our workf
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
 
---- s253199 was the lead for the initial project architecture, responsible for initializing the repository using the cookiecutter MLOps template. This involved setting up the foundational directory structure, including the src/, configs/, and tests/ folders, to ensure the project followed industry standards for reproducibility. His main technical contribution was the development of the Language Detection API using FastAPI. He implemented the core inference endpoints, integrated the model loading logic, and ensured the API was well-documented through the built-in Swagger UI. Additionally, he contributed to the containerization and monitoring phase by assisting in the initial configuration of the Docker environment and the integration of the Prometheus instrumentation within the FastAPI code.
-s215148 was...
+--- 
+
+We used a variety of generative AI tools particularly through copilot where the specific model is not specified and was set to auto. Copilot helped write our code and also debugged the terminal particularly in the implementation of the Docker images for the FastAPI + Prometheus integration. It also helped format and write some of the questions in this report.
+
+s253199 was the lead for the initial project architecture, responsible for initializing the repository using the cookiecutter MLOps template. This involved setting up the foundational directory structure, including the src/, configs/, and tests/ folders, to ensure the project followed industry standards for reproducibility. His main technical contribution was the development of the Language Detection API using FastAPI. He implemented the core inference endpoints, integrated the model loading logic, and ensured the API was well-documented through the built-in Swagger UI. Additionally, he contributed to the containerization and monitoring phase by assisting in the initial configuration of the Docker environment and the integration of the Prometheus instrumentation within the FastAPI code.
 s253248 was...
 s253268 was... 
-s253250 was...---
+
+
+
+s215148 worked on the initial training model and the hydra implementation for parameter sweeps and wandb logging. Also he worked on docker implementation and prometheus on docker. 
+
+ 
+ s253250 helped with the HTML code for the front end and implementing training models. He also worked on moving the local code to Docker so that the docker compose worked across multiple machines and helped with the prometheus implementation.
+
+
+All members actively contributed to the project as we all showed up and worked in the DTU library together and worked on each others machines to make sure some code that worked on Mac would also work on Windows and Linux etc.
+
+
+
+---
