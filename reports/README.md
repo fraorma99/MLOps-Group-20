@@ -221,9 +221,9 @@ In our project, these concepts mattered because they drastically reduced the tim
 > application but also ... .*
 >
 > Answer
-> In total we have implemented 3 tests for data and 4 tests for model training. Primarily we 
+> In total we have implemented 3 tests for data and 4 tests for model training. Primarily we
 > are testing the loading, processing and behaviour of the classes to transform the data into a
-> correct input. Apart from that, in the model test, we confirm that the model is well 
+> correct input. Apart from that, in the model test, we confirm that the model is well
 > elaborated and returns a correct output and that this output is valid in terms of shape
 > content, type, etc.
 
@@ -241,9 +241,9 @@ In our project, these concepts mattered because they drastically reduced the tim
 >
 > Answer:
 
-> The total code coverage is between 74 and 88%, which includes our data and model 
-> definition, training and data. We are far from 100% coverage of our code and even if we 
-> were then we would have a false sensation of quality, that do not reflect the reality. A 
+> The total code coverage is between 74 and 88%, which includes our data and model
+> definition, training and data. We are far from 100% coverage of our code and even if we
+> were then we would have a false sensation of quality, that do not reflect the reality. A
 > 100% coverage means that all lines in our code are run but does not evaluate if the output
 > produced is logic.
 
@@ -280,7 +280,7 @@ In larger projects, these concepts are essential because they prevent "merge hel
 >
 > Answer:
 
---- question 10 fill here ---
+ We used DVC to manage data in our project. First we initialized DVC in the repository and tracked our dataset with "dvc add", creating a "data/raw.dvc" metadata file commited to Git. The actual data files were stored in a remote Google Cloud Storage bucket and uploaded via "dvc push". With this way we managed to enable reproducibility as anyone can checkout a commit and retrieve this specific dataset version with "dvc pull". Also collaboration between team members is much safer, because data changes are tracked through DVC metadata, reducing possible issues that may happen to different devices.
 
 ### Question 11
 
@@ -297,7 +297,7 @@ In larger projects, these concepts are essential because they prevent "merge hel
 >
 > Answer:
 
---- question 11 fill here ---
+ We set up our Continuous Integration (CI) using GitHub Actions and organized it into separate worflows. Our main workflows are under ".github/workflows/" and are triggered on every push and every pull request targeting "main". First we run unit tests in "tests.yaml", this workflow creates a clean Python environment using uv, installs dependencies from our locked configuration (uv sync --dev --locked), and then executes our test with pytest. This ensures that changes to the codebase do not break the existing functionality and that all team members get consistent results in a clean environment. Also the unit test workflow uses a matrix strategy to test multiple environments to increase robustness across platforms. Specifically, we test across three operating platforms (ubuntu-latest, windows-latest, macos-latest) and two Python versions (3.12 and 3.13). Second, we run linting in a separate workflow "linting.yaml". This performs automated static checks, using tools like "ruff" to catch common issues early and enforce consistent coding standards across the project. Finally, we also enable caching for dependencies through the "astral-sh/setup-uv" action (enable-cache:true), which significantly speeds up CI runs by reusing previously downloaded packages.
 
 ## Running code and tracking experiments
 
@@ -395,7 +395,14 @@ In larger projects, these concepts are essential because they prevent "merge hel
 >
 > Answer:
 
---- question 17 fill here ---
+We used the following services:
+
+Cloud Storage (Buckets) : We used Buckets as DVC remote to save versioned data/artifacts outside of Git. Also there is a Bucket that uses Cloud Build for source/logs, and another bucket that saves the input-output logs from the deoployed API (inference_logs) and the drift reports as HTML/JSON.
+Cloud Build: We used Cloud Build to build Docker images from "cloudbuild.yaml" and we also created a Cloud Build trigger that is connected with GitHub and does automatic builds.
+Artifact Registry: We used Artifact Registry for saving our Docker images (api, train, drift-monitoring), so the Cloud Run can deploy them.
+Compute Engine:We used Compute Engine to create a Virtual machine (train-vm) to run the training on cloud (CPU environment).
+Cloud Logging: We used Cloud Logging for debugging when a revision fails.
+Cloud Run: We used Cloud Run as a serverless container platform to do deploy and "run" FastApi prediction, API and the drift monitoring API.
 
 ### Question 18
 
@@ -410,7 +417,7 @@ In larger projects, these concepts are essential because they prevent "merge hel
 >
 > Answer:
 
---- question 18 fill here ---
+ We used Google Compute Engine to run our model training in the cloud on a dedicated virtual machine. We created a VM instance named "train-vm" in the europe-west1-b zone and connected to it via SSH using "gcloud compute ssh". On the VM, we cloned our repository, installed the required dependencies, and executed the training script using our Hydra configuration, with W&B disabled when needed. The VM we used was a CPU-based instance, and the training ran entirely on CPU. This setup allowed us to validate that our training pipeline works end-to-end on GCP infrastructure and is reproducible outside our local development environments.
 
 ### Question 19
 
@@ -452,7 +459,7 @@ In larger projects, these concepts are essential because they prevent "merge hel
 >
 > Answer:
 
---- question 22 fill here ---
+We managed to train our model in the cloud using Google Compute Engine, we created a VM instance (train-vm) in zone europe-west1-b and connected to it via SSH with "gcloud compute ssh". On the VM, we cloned our GitHub repository, set up the Python environment, and ran our training entrypoint with the same Hydra configuration used locally. We verified the runtime environment by cheking that PyTorch was available and confirmed that training executed on CPU. We chose Compute Engine because it is straightforward and flexible. It lets us reproduce the same training procedure as locally without additional specific platforms configuration, and it serves as a practical first step toward a fully cloud-based ML workflow.
 
 ## Deployment
 
@@ -485,7 +492,9 @@ In larger projects, these concepts are essential because they prevent "merge hel
 >
 > Answer:
 
---- question 24 fill here ---
+ We deployed our language-detection model as a FastAPI application. First, we verified the service locally by building and running a Docker image, to ensure the container starts correctly and the "/predict" endpoint works. Then we deployed the same container image to Google Cloud Run, with the image stored in Artifact Registry. The API loads the required artifacts at startups and serves predictions via a public Cloud Run URL. We can invoke the deployed service with: curl -X POST "$SERVICE_URL/predict"
+-H "Content-Type: application/json"
+-d '{"text":"Hello, how are you?"}' The response includes the predicted language. In addition, we enabled input-output logging to a Cloud Storage Bucket and deployed a separate Cloud Run "drift monitoring" API that reads the stored logs and writes drift reports as HTML back to the bucket.
 
 ### Question 25
 
@@ -603,7 +612,7 @@ Transitioning to uv for dependency management also required a pivot in our workf
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
 
---- 
+---
 
 We used a variety of generative AI tools particularly through copilot where the specific model is not specified and was set to auto. Copilot helped write our code and also debugged the terminal particularly in the implementation of the Docker images for the FastAPI + Prometheus integration. It also helped format and write some of the questions in this report. We got AI to fully generate our architecture image.
 
@@ -616,9 +625,9 @@ s253248 was...
 s253268 worked on testing the model and training part of the project and completed the code coverage part. Apart from that, he created the workflows and pre-commit part, tested the API and created a new specialized model with ONNX with its own API based on the best original model.
 
 
-s215148 worked on the initial training model and the hydra implementation for parameter sweeps and wandb logging. Also he worked on docker implementation and prometheus on docker. 
+s215148 worked on the initial training model and the hydra implementation for parameter sweeps and wandb logging. Also he worked on docker implementation and prometheus on docker.
 
- 
+
  s253250 helped with the HTML code for the front end and implementing training models. He also worked on moving the local code to Docker so that the docker compose worked across multiple machines and helped with the prometheus implementation.
 
 
