@@ -1,6 +1,6 @@
 services:
   api:
-    image: kenzodtu/prometheus:latest
+    image: kenzodtu/prometheus:kenzothorv1
     container_name: mlops-api
     ports:
       - "8000:8000"
