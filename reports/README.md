@@ -331,7 +331,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- ![train](figures/wandb_train.png) ![val](figures/wandb_val.png) The two images show training and validation logging from the hyperparameter sweep, where we sweep learning rate. The figures show us that as we train our model we generally decrease loss and increase accuracy. We monitor the convergence and generalization over each epoch on W&B. In the validation plot, we look for low, stable loss and accuracy that tracks (but stays below) train accuracy as it helps us catch overfitting early. Additionally, once validation loss plateaus the ReduceLROnPlateau in train.py halves the learning rate (patience=2, factor=0.5). Each sweep run is logged in W&B with the Hydra config, so we can sort runs by validation loss/accuracy/F1 and download the best model artifact for implementing the API model. ---
+--- ![train](figures/wandb_train.png) ![val](figures/wandb_val.png) The two images show training and validation logging from the hyperparameter sweep, where we sweep learning rate. The figures show us that as we train our model we generally decrease loss and increase accuracy. We monitor the convergence and generalization over each epoch on W&B. In the validation plot, we look for low, stable loss and accuracy that tracks (but stays below) train accuracy as it helps us catch overfitting early. Additionally, once validation loss plateaus the ReduceLROnPlateau in train.py halves the learning rate (patience=2, factor=0.5). Each sweep run is logged in W&B with the Hydra config, so we can sort runs by validation loss/accuracy/F1 and download the best model artifact for implementing the API model. We experimented with different learning rates but it did not improve the model, so we kept the original lr=0.001 as it yielded the best results.---
 
 ### Question 15
 
@@ -346,14 +346,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- For our project we developed two images: one for training and one for deployment. The docker images also us to replicate the results of our project across different machines. For example to run the training docker image (lr=0.001) one must update the .env file with their API key then run 'docker login / docker run --platform linux/amd64 \
-  -v $(pwd)/.env:/app/.env:ro \
-  --env-file $(pwd)/.env \
-  kenzodtu/mlops-group-20-trainer:latest
-' and can check wandb.ai for their trainign results on lr=0.001. To run the API docker that shows the deployment phase of the project one must run 'docker login
-docker pull --platform linux/amd64 kenzodtu/mlops-api:latest
-docker run -d --name mlops-api --platform linux/amd64 -p 8000:8000 kenzodtu/mlops-api:latest
-' then go to 'localhost:8000/ui' and refresh after 20-30 seconds as it launches the program. Then you can test your own phrases on our language detection API. ---
+--- For our project we developed two images: one for training and one for deployment. The docker images also us to replicate the results of our project across different machines. For example to run the docker image with the API + prometheus metrics (lr=0.001) one clone the repository and run "docker compose pull" then "docker compose run". Then go to your browser and search 'localhost:8000/ui' and refresh after 20-30 seconds as it launches the program. Then you can test your own phrases on our language detection API. You can run metrics on prometheus on "localhost:9090" such as api_requests_total ---
 
 ### Question 16
 
@@ -459,7 +452,7 @@ docker run -d --name mlops-api --platform linux/amd64 -p 8000:8000 kenzodtu/mlop
 >
 > Answer:
 
---- question 23 fill here ---
+--- We did manage to write an API for our model. We used FastAPI to create an api that runs language detection predictions based on our models training. The API loads the trained model and vocabulary on startup, then exposes endpoints including /predict for inference and /ui with a web interface for testing. We prefer the user use "localhost:8000/ui/" as it is more user friendly. We did several special things: (1) integrated Prometheus metrics to track predictions, request latency, inference time, and input text length; (2) containerized the API using Docker and orchestrated it with docker-compose alongside a Prometheus service for metrics collection. The API runs on port 8000 and Prometheus on port 9090 for production monitoring. ---
 
 ### Question 24
 
@@ -505,7 +498,7 @@ docker run -d --name mlops-api --platform linux/amd64 -p 8000:8000 kenzodtu/mlop
 >
 > Answer:
 
---- question 26 fill here ---
+--- We successfully implemented monitoring using Prometheus. Our monitoring system works as follows: (1) the FastAPI application exposes a /metrics endpoint that outputs Prometheus-formatted metrics including api_requests_total, api_request_latency_seconds, api_predictions_total, api_inference_latency_seconds, and api_input_text_length; (2) the Prometheus server running on port 9090 scrapes these metrics every 5 seconds from the API service; (3) Prometheus stores all metrics in a time-series database, allowing historical analysis; (4) users access the Prometheus dashboard to query and visualize metrics over time using PromQL. This monitoring setup helps us understand application behavior, detect performance degradation, identify prediction patterns by language, and spot potential issues like unusual latency spikes or request patterns. The time-series data enables long-term trend analysis and capacity planning, ensuring the application remains healthy and performant in production. ---
 
 ## Overall discussion of project
 
