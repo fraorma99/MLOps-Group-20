@@ -142,7 +142,9 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- We used the third-party framework, torchmetrics, in our project. We primarily used it to import metrics to evaluate the performance of the ML model on the training/validation set. These values were then logged to W&B after each epoch. ---
+--- In addition to the standard course requirements, we integrated the torchmetrics library into our training pipeline. We primarily utilized its standardized implementations of accuracy and F1-score to evaluate our LanguageClassifier model's performance on the training, validation, and test sets. This framework allowed us to compute metrics efficiently on the CPU/GPU without manually managing the accumulation of results across batches.
+
+Using torchmetrics significantly helped us complete the project by ensuring that our evaluation logic was both rigorous and bug-free. These computed values were seamlessly logged to Weights & Biases (W&B) after each epoch, providing us with reliable visualizations of the model's convergence and generalization capabilities. Furthermore, this integration simplified the process of comparing different experiments, as it provided a consistent metric API that was decoupled from our core model logic, facilitating a cleaner and more maintainable codebase in train.py. ---
 
 ## Coding environment
 
@@ -162,7 +164,9 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- We used uv to manage our dependencies keeping everything in the pyproject.toml and uv.lock for reproducibility. A new teammate would have to pip install uv, clone the repo, and then run 'uv sync' to create the venv with the dependencies for the project.  ---
+--- We managed our project dependencies using uv, centralizing everything within the pyproject.toml and uv.lock files to ensure total reproducibility across the team. We moved away from standard requirements files because the lockfile mechanism allows us to guarantee that every developer is working with the exact same versions of every library, effectively eliminating the "it works on my machine" problem. If a new team member joined the project, the process to replicate our environment would be straightforward: they would simply need to install uv, clone the repository, and run the uv sync command. This single command automatically creates a virtual environment and installs all necessary packages as defined in our deterministic lockfile.
+
+Beyond the local setup, we also integrated this dependency management into our Docker workflow to ensure infrastructure level consistency. A new teammate could opt to bypass local installation entirely by using our docker-compose.yml file, which orchestrates the API, the trainer, and the Prometheus monitoring stack. By running docker compose pull followed by docker compose up, they would launch a containerized environment where all dependencies were already optimized and installed during the image build process. This dual approach ensures that whether someone is developing locally or deploying to a container, the environment remains stable and identical regardless of the underlying operating system or hardware architecture.  ---
 
 ### Question 5
 
