@@ -142,7 +142,9 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- We used the third-party framework, torchmetrics, in our project. We primarily used it to import metrics to evaluate the performance of the ML model on the training/validation set. These values were then logged to W&B after each epoch. ---
+--- In addition to the standard course requirements, we integrated the torchmetrics library into our training pipeline. We primarily utilized its standardized implementations of accuracy and F1-score to evaluate our LanguageClassifier model's performance on the training, validation, and test sets. This framework allowed us to compute metrics efficiently on the CPU/GPU without manually managing the accumulation of results across batches.
+
+Using torchmetrics significantly helped us complete the project by ensuring that our evaluation logic was both rigorous and bug-free. These computed values were seamlessly logged to Weights & Biases (W&B) after each epoch, providing us with reliable visualizations of the model's convergence and generalization capabilities. Furthermore, this integration simplified the process of comparing different experiments, as it provided a consistent metric API that was decoupled from our core model logic, facilitating a cleaner and more maintainable codebase in train.py. ---
 
 ## Coding environment
 
