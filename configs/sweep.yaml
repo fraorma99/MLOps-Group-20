@@ -63,4 +63,3 @@ wandb:
   tags: []
   watch_model: false
   log_freq: 100
-
