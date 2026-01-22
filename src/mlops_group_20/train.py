@@ -120,14 +120,12 @@ def train(cfg: DictConfig):
     train_dataset = TextDataset(
         train_data['Text'].tolist(),
         [label2idx[lang] for lang in train_data['Language']],
-        [label2idx[lang] for lang in train_data['Language']],
         vocab,
         tokenizer,
         max_len=cfg.data.max_len,
     )
     val_dataset = TextDataset(
         val_data['Text'].tolist(),
-        [label2idx[lang] for lang in val_data['Language']],
         [label2idx[lang] for lang in val_data['Language']],
         vocab,
         tokenizer,
@@ -321,7 +319,7 @@ def train(cfg: DictConfig):
         'train_accs': train_accs,
         'val_accs': val_accs,
         'final_train_acc': train_accs[-1],
-        'final_val_acc': val_accs[-1]
+        'final_val_acc': val_accs[-1],
         'train_losses': train_losses,
         'val_losses': val_losses,
         'train_accs': train_accs,
