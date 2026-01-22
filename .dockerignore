@@ -13,9 +13,6 @@ __pycache__
 # OS specific files
 .DS_Store
 
-# Data and Models (We mount these as volumes or handle them separately)
-data/raw/*
-data/raw.dvc
 #data/processed/*
 data/processed\ 2/*
 # Keep splits but ignore the rest in processed

@@ -23,6 +23,7 @@ COPY configs/ configs/
 COPY src/ src/
 COPY models/ models/
 COPY data/splits/ data/splits/
+COPY data/ data/
 # Metadata files are required for the local package installation
 COPY README.md LICENSE ./
 
