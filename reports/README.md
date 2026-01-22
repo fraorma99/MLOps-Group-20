@@ -594,14 +594,8 @@ In larger projects, these concepts are essential because they prevent "merge hel
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
 
-fewafewubaofewnafioewnifowf ewafw afew afewafewafionewoanf waf ewonfieownaf fewnaiof newio fweanøf wea fewa
- fweafewa fewiagonwa ognwra'g
- wa
- gwreapig ipweroang w rag
- wa grwa
-  g
-  ew
-  gwea g
-  ew ag ioreabnguorwa bg̈́aw
-   wa
-   gew4igioera giroeahgi0wra gwa
+--- s253199 was the lead for the initial project architecture, responsible for initializing the repository using the cookiecutter MLOps template. This involved setting up the foundational directory structure, including the src/, configs/, and tests/ folders, to ensure the project followed industry standards for reproducibility. His main technical contribution was the development of the Language Detection API using FastAPI. He implemented the core inference endpoints, integrated the model loading logic, and ensured the API was well-documented through the built-in Swagger UI. Additionally, he contributed to the containerization and monitoring phase by assisting in the initial configuration of the Docker environment and the integration of the Prometheus instrumentation within the FastAPI code.
+s215148 was...
+s253248 was...
+s253268 was... 
+s253250 was...---
