@@ -576,7 +576,11 @@ In larger projects, these concepts are essential because they prevent "merge hel
 >
 > Answer:
 
---- question 30 fill here ---
+--- One of the most significant challenges we faced during the project involved the initial configuration of the Docker orchestration and ensuring cross-platform compatibility. Because our team members utilized different hardware—specifically moving between Apple Silicon (ARM64) and standard Linux/Windows (AMD64) architectures—we frequently encountered "no matching manifest" errors when attempting to pull or run our custom images. We overcame this hurdle by standardizing our build process using the --platform flag and consolidating our services into a unified docker-compose.yml that handles multi-service networking across different environments.
+
+We also spent a considerable amount of time troubleshooting the connectivity between our FastAPI application and the Prometheus monitoring stack. Our initial setup often resulted in "Connection Refused" errors because the Prometheus server could not resolve the internal container address for the API's metrics endpoint. To resolve this, we refined the instrumentation logic in api.py to ensure the /metrics endpoint was properly exposed and reconfigured the Docker virtual network to use static service names, allowing Prometheus to reliably scrape data at http://api:8000/metrics. Additionally, we had to rely heavily on Docker logs to verify that our specific image tags actually contained the updated instrumentation code, which taught us the importance of rigorous version tagging.
+
+Transitioning to uv for dependency management also required a pivot in our workflow, particularly in maintaining a synchronized uv.lock file across different development branches. We managed this by making uv sync a mandatory step in our local development cycle and ensuring our Dockerfiles were configured to leverage the lockfile for strictly deterministic builds. By adopting this container-first mindset and automating our quality gates, we were able to turn these initial struggles into a stable and reproducible MLOps pipeline. ---
 
 ### Question 31
 
