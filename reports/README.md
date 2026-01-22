@@ -382,7 +382,14 @@ docker run -d --name mlops-api --platform linux/amd64 -p 8000:8000 kenzodtu/mlop
 >
 > Answer:
 
---- question 17 fill here ---
+--- We used the following services:
+1) Cloud Storage (Buckets) : We used Buckets as DVC remote to save versioned data/artifacts outside of Git. Also there is a Bucket that uses Cloud Build for source/logs, and another bucket that saves the input-output logs from the deoployed API (inference_logs) and the drift reports as HTML/JSON.
+2) Cloud Build: We used Cloud Build to build Docker images from "cloudbuild.yaml" and we also created a Cloud Build trigger that is connected with GitHub and does automatic builds.
+3) Artifact Registry: We used Artifact Registry for saving our Docker images (api, train, drift-monitoring), so the Cloud Run can deploy them.
+4) Compute Engine:We used Compute Engine to create a Virtual machine (train-vm) to run the training on cloud (CPU environment).
+5) Cloud Logging: We used Cloud Logging for debugging when a revision fails.
+6) Cloud Run: We used Cloud Run as a serverless container platform to do deploy and "run" FastApi prediction, API and the drift monitoring API.
+
 
 ### Question 18
 
@@ -397,7 +404,8 @@ docker run -d --name mlops-api --platform linux/amd64 -p 8000:8000 kenzodtu/mlop
 >
 > Answer:
 
---- question 18 fill here ---
+--- We used Google Compute Engine to run our model training in the cloud on a dedicated virtual machine. We created a VM instance named "train-vm" in the europe-west1-b zone and connected to it via SSH using "gcloud compute ssh". On the VM, we cloned our repository, installed the required dependencies, and executed the training script using our Hydra configuration, with W&B disabled when needed.
+The VM we used was a CPU-based instance, and the training ran entirely on CPU. This setup allowed us to validate that our training pipeline works end-to-end on GCP infrastructure and is reproducible outside our local development environments.
 
 ### Question 19
 
@@ -439,7 +447,8 @@ docker run -d --name mlops-api --platform linux/amd64 -p 8000:8000 kenzodtu/mlop
 >
 > Answer:
 
---- question 22 fill here ---
+--- We managed to train our model in the cloud using Google Compute Engine, we created a VM instance (train-vm) in zone europe-west1-b and connected to it via SSH with "gcloud compute ssh". On the VM, we cloned our GitHub repository, set up the Python environment, and ran our training entrypoint with the same Hydra configuration used locally. We verified the runtime environment by cheking that PyTorch was available and confirmed that training executed on CPU.
+We chose Compute Engine because it is straightforward and flexible. It lets us reproduce the same training procedure as locally without additional specific platforms configuration, and it serves as a practical first step toward a fully cloud-based ML workflow.
 
 ## Deployment
 
@@ -472,7 +481,12 @@ docker run -d --name mlops-api --platform linux/amd64 -p 8000:8000 kenzodtu/mlop
 >
 > Answer:
 
---- question 24 fill here ---
+--- We deployed our language-detection model as a FastAPI application. First, we verified the service locally by building and running a Docker image, to ensure the container starts correctly and the "/predict" endpoint works. Then we deployed the same container image to Google Cloud Run, with the image stored in Artifact Registry. The API loads the required artifacts at startups and serves predictions via a public Cloud Run URL.
+We can invoke the deployed service with:
+curl -X POST "$SERVICE_URL/predict" \
+  -H "Content-Type: application/json" \
+  -d '{"text":"Hello, how are you?"}'
+The response includes the predicted language. In addition, we enabled input-output logging to a Cloud Storage Bucket and deployed a separate Cloud Run "drift monitoring" API that reads the stored logs and writes drift reports as HTML back to the bucket.
 
 ### Question 25
 
