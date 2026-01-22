@@ -256,7 +256,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 10 fill here ---
+--- We used DVC to manage data in our project. First we initialized DVC in the repository and tracked our dataset with "dvc add", creating a "data/raw.dvc" metadata file commited to Git. The actual data files were stored in a remote Google Cloud Storage bucket and uploaded via "dvc push". With this way we managed to enable reproducibility as anyone can checkout a commit and retrieve this specific dataset version with "dvc pull". Also collaboration between team members is much safer, because data changes are tracked through DVC metadata, reducing possible issues that may happen to different devices.
 
 ### Question 11
 
@@ -273,7 +273,11 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 11 fill here ---
+--- We set up our Continuous Integration (CI) using GitHub Actions and organized it into separate worflows. Our main workflows are under ".github/workflows/" and are triggered on every push and every pull request targeting "main".
+First we run unit tests in "tests.yaml", this workflow creates a clean Python environment using uv, installs dependencies from our locked configuration (uv sync --dev --locked), and then executes our test with pytest. This ensures that changes to the codebase do not break the existing functionality and that all team members get consistent results  in a clean environment.
+Also the unit test workflow uses a matrix strategy to test multiple environments to increase robustness across platforms. Specifically, we test across three operating platforms (ubuntu-latest, windows-latest, macos-latest) and two Python versions (3.12 and 3.13).
+Second, we run linting in a separate workflow "linting.yaml". This performs automated static checks, using tools like "ruff" to catch common issues early and enforce consistent coding standards across the project.
+Finally, we also enable caching for dependencies through the "astral-sh/setup-uv" action (enable-cache:true), which significantly speeds up CI runs by reusing previously downloaded packages.
 
 ## Running code and tracking experiments
 
