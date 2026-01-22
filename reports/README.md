@@ -576,7 +576,7 @@ For unit testing we used pytest with testclients and built a mock library so tha
 >
 > Answer:
 
---- question 29 fill here ---
+--- Our diagram: ![arch](figures/architecture.png) The starting point of the project is creating the github on cookiecutter template and sharing the project with collaborators. The next step is the local development where we import data, process it, train the model, evaluate it and run unit tests. There are two splits from this point, the first is the DVC,  . The second is making sure the Docker images are created with multiplatform support using the buildx container for Docker. From this one can pull the image and docker compose up and test the results of the project on localhost. Additionally, the prometheus reads the outputs and inputs of the API and shows interesting metrics. ---
 
 ### Question 30
 
