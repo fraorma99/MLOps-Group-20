@@ -373,7 +373,7 @@ In larger projects, these concepts are essential because they prevent "merge hel
 >
 > Answer:
 
----  ---
+--- When running into a bug while running experiments we started by reading the terminal for where the bug occured. If the fix was obvious like a syntax error we fixed this and reran the experiment to see if the bug was fixed. For more complex bug we used copilot to read the entire terminal message and explain why it went wrong and how to fix it and implemented the fix. We profiled our code using cProfile but it was hard to interpret. Therefore we used snakeviz after to make it more visual and easier to digest. The information was still dense but it allowed us to see where the performance bottlenecks were. This inspired us to implement torchmetrics as we felt it would streamline the accuracy reports.  ---
 
 ## Working in the cloud
 
