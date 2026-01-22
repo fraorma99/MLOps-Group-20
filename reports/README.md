@@ -164,7 +164,9 @@ Using torchmetrics significantly helped us complete the project by ensuring that
 >
 > Answer:
 
---- We used uv to manage our dependencies keeping everything in the pyproject.toml and uv.lock for reproducibility. A new teammate would have to pip install uv, clone the repo, and then run 'uv sync' to create the venv with the dependencies for the project.  ---
+--- We managed our project dependencies using uv, centralizing everything within the pyproject.toml and uv.lock files to ensure total reproducibility across the team. We moved away from standard requirements files because the lockfile mechanism allows us to guarantee that every developer is working with the exact same versions of every library, effectively eliminating the "it works on my machine" problem. If a new team member joined the project, the process to replicate our environment would be straightforward: they would simply need to install uv, clone the repository, and run the uv sync command. This single command automatically creates a virtual environment and installs all necessary packages as defined in our deterministic lockfile.
+
+Beyond the local setup, we also integrated this dependency management into our Docker workflow to ensure infrastructure level consistency. A new teammate could opt to bypass local installation entirely by using our docker-compose.yml file, which orchestrates the API, the trainer, and the Prometheus monitoring stack. By running docker compose pull followed by docker compose up, they would launch a containerized environment where all dependencies were already optimized and installed during the image build process. This dual approach ensures that whether someone is developing locally or deploying to a container, the environment remains stable and identical regardless of the underlying operating system or hardware architecture.  ---
 
 ### Question 5
 
