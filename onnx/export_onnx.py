@@ -28,7 +28,7 @@ dummy_input = torch.randint(0, len(vocab), (1, 50))
 torch.onnx.export(
     model,
     dummy_input,
-    "models/best_model_fixed.onnx",
+    "models/best_model.onnx",
     input_names=['input_ids'],
     output_names=['output'],
     dynamic_axes={
