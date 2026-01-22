@@ -1,0 +1,2 @@
+- wandb.project=mlops_group_20
+- wandb.run_name=lr_$\{optimizer.lr\}

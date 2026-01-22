@@ -16,12 +16,14 @@ COPY pyproject.toml uv.lock ./
 # Synchronize dependencies (excluding dev tools) without installing the project yet
 RUN uv sync --frozen --no-dev --no-install-project
 
+# Copy configuration (Required for Hydra - Milestone M11)
+COPY configs/ configs/
+
 # Copy the source code and necessary artifacts
 COPY src/ src/
 COPY models/ models/
-COPY data/splits/ data/splits/
 # Metadata files are required for the local package installation
-COPY README.md LICENSE ./ 
+COPY README.md LICENSE ./
 
 # Install the project in editable mode so 'mlops_group_20' is available as a module
 RUN uv pip install -e .
@@ -29,5 +31,5 @@ RUN uv pip install -e .
 # Expose the port that FastAPI will use
 EXPOSE 8000
 
-# Start the FastAPI server using uvicorn
+# Start the API with uvicorn
 ENTRYPOINT ["uv", "run", "uvicorn", "mlops_group_20.api:app", "--host", "0.0.0.0", "--port", "8000"]

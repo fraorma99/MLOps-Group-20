@@ -19,7 +19,7 @@ We will integrate these key frameworks:
 
 **3. Data**
 
-We will use the "Language Detection" dataset available on Kaggle. 
+We will use the "Language Detection" dataset available on Kaggle.
 
 https://www.kaggle.com/datasets/basilb2s/language-detection
 
@@ -40,96 +40,247 @@ Evolution: As the project progresses, we may investigate "data drifting" by intr
 
 The directory structure of the project looks like this:
 ```txt
-├── .github/                  # Github actions and dependabot
+MLOps-Group-20/
+├── .devcontainer/           # Dev environment setup
+│   ├── devcontainer.json
+│   └── post_create.sh
+├── .dvc/                    # Data versioning config
+│   ├── .gitignore
+│   └── config
+├── .github/                 # Automation and CI/CD
 │   ├── dependabot.yaml
 │   └── workflows/
+│       ├── data_changes.yaml
+│       ├── linting.yaml
+│       ├── model_changes.yaml
 │       └── tests.yaml
-├── configs/                  # Configuration files
-├── data/                     # Data directory
-│   ├── processed
-│   └── raw
-├── dockerfiles/              # Dockerfiles
-│   ├── api.Dockerfile
-│   └── train.Dockerfile
-├── docs/                     # Documentation
+├── configs/                 # Hydra and Sweeps
+│   ├── config.yaml
+│   └── sweep.yaml
+├── data/                    # Data management
+│   ├── processed/           # Processed data files
+│   │   ├── processed.pkl
+│   │   └── splits/          # Data split indices
+│   │       ├── test_indices.pkl
+│   │       ├── train_indices.pkl
+│   │       └── val_indices.pkl
+│   ├── raw/                 # Original dataset files
+│   │   └── language_detection.csv
+│   ├── splits/              # Metadata and vocab
+│   │   ├── label_mappings.pkl
+│   │   ├── split_info.pkl
+│   │   └── vocab.pkl
+│   └── raw.dvc              # DVC data pointer
+├── dockerfiles/             # Container recipes
+│   ├── api.dockerfile
+│   └── train.dockerfile
+├── docs/                    # Technical documentation
 │   ├── mkdocs.yml
+│   ├── README.md
 │   └── source/
 │       └── index.md
-├── models/                   # Trained models
-├── notebooks/                # Jupyter notebooks
-├── reports/                  # Reports
-│   └── figures/
-├── src/                      # Source code
-│   ├── project_name/
-│   │   ├── __init__.py
-│   │   ├── api.py
-│   │   ├── data.py
-│   │   ├── evaluate.py
-│   │   ├── models.py
-│   │   ├── train.py
-│   │   └── visualize.py
-└── tests/                    # Tests
+├── images/                  # Project visual assets
+│   └── figures/             # Training plots (M14)
+├── models/                  # Model artifacts
+│   ├── best_model.pt
+│   └── training_history.pt
+├── multirun/                # Hydra multirun logs
+├── notebooks/               # Exploratory Jupyter notebooks
+├── outputs/                 # Hydra run logs
+├── reports/                 # Compliance and Cloud reports
+│   ├── reports.py
+│   ├── README.md
+│   └── figures/             # GCP and WandB screenshots
+│       ├── bucket.png, build.png, overview.png, registry.png
+│       └── wandb.png, wandb_train.png, wandb_val.png
+├── scripts/                 # Automation utility scripts
+│   ├── download_data.sh
+│   └── setup.sh
+├── src/mlops_group_20/      # Main Python package
+│   ├── __init__.py
+│   ├── api.py
+│   ├── data.py
+│   ├── evaluate.py
+│   ├── model.py
+│   ├── train.py
+│   └── visualize.py
+├── tests/                   # Testing suite (Pytest)
 │   ├── __init__.py
 │   ├── test_api.py
 │   ├── test_data.py
 │   └── test_model.py
-├── .gitignore
-├── .pre-commit-config.yaml
-├── LICENSE
-├── pyproject.toml            # Python project file
-├── README.md                 # Project README
-├── requirements.txt          # Project requirements
-├── requirements_dev.txt      # Development requirements
-└── tasks.py                  # Project tasks
+├── wandb/                   # Local WandB cache
+│
+├── .dockerignore            # Docker exclusion rules
+├── .dvcignore               # DVC exclusion rules
+├── .env.example             # Template for secrets
+├── .env 2.example           # Alternative secret template
+├── .gitignore               # Git exclusion rules
+├── .pre-commit-config.yaml  # Pre-push code quality
+├── .python-version          # Project Python version
+├── Dockerfile               # Root Docker recipe
+├── LICENSE                  # Project legal license
+├── README.md                # Project main documentation
+├── cloudbuild.yaml          # GCP build pipeline
+├── docker-compose.yml       # Service orchestration
+├── profile.prof             # Training profile data
+├── pyproject.toml           # Project dependencies (UV)
+├── tasks.py                 # Project task runner
+└── uv.lock                  # Deterministic dependency lock
 ```
 
 
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
-
+Data from: https://www.kaggle.com/datasets/basilb2s/language-detection
 
 ## Getting Started
+
+Clone the repository:
 ```bash
 git clone https://github.com/fraorma99/MLOps-Group-20.git
 cd MLOps-Group-20
 ```
-to clone Fran_V1:
+
+Then head to the **Docker Deployment** section below to get started!
+
+## 🐳 Docker Deployment
+
+### Quick Start (API Only)
+
+If you just want to test the language detection API without running training:
+
+**1. Run the API container** (no setup needed):
 ```bash
-git clone -b Fran_V1 https://github.com/fraorma99/MLOps-Group-20.git
-cd MLOps-Group-20
+docker login
+docker pull --platform linux/amd64 kenzodtu/mlops-api:latest
+docker run -d --name mlops-api --platform linux/amd64 -p 8000:8000 kenzodtu/mlops-api:latest
+
 ```
 
-**1. Install dependencies**
+**2. Wait for startup** (takes ~30 seconds on first run):
+The container will download dependencies on first launch. Check it's ready:
+```bash
+docker logs mlops-api -f  # Press Ctrl+C when you see "Application startup complete"
 ```
-uv sync
-./scripts/setup.sh
+
+**3. Open the web UI**:
+Visit [http://localhost:8000/ui](http://localhost:8000/ui)
+
+Type any text and get instant language detection with confidence scores! 🎉
+
+---
+
+### Full Setup with Training (docker-compose)
+
+If you want to run training + API together on your machine:
+
+**Prerequisites**:
+- Docker Desktop installed ([download here](https://www.docker.com/products/docker-desktop))
+- `.env` file created (see above)
+- At least 8GB free disk space
+
+**1. Create `.env` file** (same as above)
+
+**2. Start the full stack**:
+```bash
+docker compose up -d
 ```
-**2. Install the package in "editable" mode (-e)**
+
+This will:
+- Start the trainer container to process data and train the model
+- Save trained models to `./models/`
+- Start the API container that uses the trained models
+- Logs are visible with `docker compose logs -f`
+
+**3. Access the API**:
+- Web UI: [http://localhost:8000/ui](http://localhost:8000/ui)
+- API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+- Health check: `curl http://localhost:8000/health`
+
+**4. Make predictions** (command line):
+```bash
+curl -X POST "http://localhost:8000/predict" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Bonjour, comment allez-vous?"}'
 ```
-uv pip install -e .
+
+Response:
+```json
+{
+  "input_text": "Bonjour, comment allez-vous?",
+  "predicted_language": "French",
+  "status": "success"
+}
 ```
-**3. Download dataset**
+
+---
+
+### Stopping Services
+
+```bash
+# Stop all services
+docker compose down
+
+# Stop and remove volumes (clean slate)
+docker compose down -v
 ```
-./scripts/download_data.sh
+
+---
+
+### Troubleshooting
+
+**API won't start**: Check if port 8000 is already in use
+```bash
+lsof -i :8000  # List what's using port 8000
+kill -9 <PID>  # Kill the process
 ```
-**4. Process data**
+
+**Training still running**: Check logs
+```bash
+docker compose logs -f trainer
 ```
-uv run python src/mlops_group_20/data.py \
-  data/raw/language_detection.csv \
-  data/processed/
+
+**Images not found**: Pull latest versions
+```bash
+docker pull kenzodtu/mlops-api:latest
+docker pull kenzodtu/mlops-group-20-trainer:latest
 ```
-**5. Train the model on the kaggle data**
+
+---
+
+### Manual Docker Commands (if not using docker-compose)
+
+Build trainer image locally:
+```bash
+docker build --platform linux/amd64 -t mlops-kenzov3 .
 ```
-uv run python -m mlops_group_20.train
+
+Run trainer:
+```bash
+docker run -it --name mlops-trainer \
+  -v $(pwd)/models:/app/models \
+  -v $(pwd)/outputs:/app/outputs \
+  -v $(pwd)/wandb:/app/wandb \
+  -e WANDB_API_KEY=$WANDB_API_KEY \
+  -e WANDB_ENTITY=$WANDB_ENTITY \
+  -e WANDB_PROJECT=$WANDB_PROJECT \
+  mlops-kenzov3
 ```
-**6. Evaluate the model on the testing**
+
+Build API image:
+```bash
+docker build --platform linux/amd64 -f dockerfiles/api.dockerfile -t mlops-api:latest .
 ```
-uv run python src/mlops_group_20/evaluate.py
-```
-**7. Visualize performance**
-```
-uv run python src/mlops_group_20/visualize.py
+
+Run API:
+```bash
+docker run -d --name mlops-api \
+  -p 8000:8000 \
+  -v $(pwd)/models:/app/models:ro \
+  -v $(pwd)/data/splits:/app/data/splits:ro \
+  mlops-api:latest
 ```
 ## Docker sofar
 
