@@ -29,7 +29,7 @@ def load_reference_df(max_rows: int = 5000) -> pd.DataFrame:
         raise FileNotFoundError(f"REFERENCE_PATH not found: {REFERENCE_PATH}")
 
     df = pd.read_csv(REFERENCE_PATH)
-    # expected columns in your dataset: Text, Language
+    #  columns in our dataset: Text, Language
     if "Text" not in df.columns or "Language" not in df.columns:
         raise ValueError(f"Reference CSV must contain columns Text, Language. Found: {df.columns.tolist()}")
 
