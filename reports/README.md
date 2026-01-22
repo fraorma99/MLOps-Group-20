@@ -217,16 +217,16 @@ In our project, these concepts mattered because they drastically reduced the tim
 > Recommended answer length: 50-100 words.
 >
 > Example:
-> *In total we have implemented 3 tests for data and 4 tests for model training. Primarily we are testing the loading, processing and behaviour
-> of the classes used to transform the data into a valid input for our models. Apart from that, 
->
->
-> Answer:
 > In total we have implemented X tests. Primarily we are testing ... and ... as these the most critical parts of our*
 > application but also ... .*
 >
+> Answer
+> In total we have implemented 3 tests for data and 4 tests for model training. Primarily we 
+> are testing the loading, processing and behaviour of the classes to transform the data into a
+> correct input. Apart from that, in the model test, we confirm that the model is well 
+> elaborated and returns a correct output and that this output is valid in terms of shape
+> content, type, etc.
 
---- question 7 fill here ---
 
 ### Question 8
 
@@ -241,7 +241,12 @@ In our project, these concepts mattered because they drastically reduced the tim
 >
 > Answer:
 
---- question 8 fill here ---
+> The total code coverage is between 74 and 88%, which includes our data and model 
+> definition, training and data. We are far from 100% coverage of our code and even if we 
+> were then we would have a false sensation of quality, that do not reflect the reality. A 
+> 100% coverage means that all lines in our code are run but does not evaluate if the output
+> produced is logic.
+
 
 ### Question 9
 
@@ -495,7 +500,7 @@ In larger projects, these concepts are essential because they prevent "merge hel
 >
 > Answer:
 
---- question 25 fill here ---
+For unit testing we used pytest with testclients and built a mock library so that its faster to run the test. The tests cover stages (languages, ui, predict), the execution of the model and possible errors that it could encounter (empty text, missing fields, long text, etc). For load testing we used Locust. The results of the load testing showed that the API handled concurrent requests to root and user endpoints effectively.
 
 ### Question 26
 
@@ -604,9 +609,11 @@ We used a variety of generative AI tools particularly through copilot where the 
 
 
 s253199 was the lead for the initial project architecture, responsible for initializing the repository using the cookiecutter MLOps template. This involved setting up the foundational directory structure, including the src/, configs/, and tests/ folders, to ensure the project followed industry standards for reproducibility. His main technical contribution was the development of the Language Detection API using FastAPI. He implemented the core inference endpoints, integrated the model loading logic, and ensured the API was well-documented through the built-in Swagger UI. Additionally, he contributed to the containerization and monitoring phase by assisting in the initial configuration of the Docker environment and the integration of the Prometheus instrumentation within the FastAPI code.
-s253248 was...
-s253268 was... 
 
+s253248 was...
+
+
+s253268 worked on testing the model and training part of the project and completed the code coverage part. Apart from that, he created the workflows and pre-commit part, tested the API and created a new specialized model with ONNX with its own API based on the best original model.
 
 
 s215148 worked on the initial training model and the hydra implementation for parameter sweeps and wandb logging. Also he worked on docker implementation and prometheus on docker. 
