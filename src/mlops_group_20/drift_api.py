@@ -99,7 +99,7 @@ def report(
       - current data: last N inference logs from GCS
       - reference data: local REFERENCE_PATH CSV
 
-    Returns HTML. Optionally uploads the HTML back to GCS.
+    Returns HTML.
     """
     if not BUCKET_NAME:
         raise HTTPException(status_code=500, detail="BUCKET_NAME env var is not set")
