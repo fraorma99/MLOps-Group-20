@@ -84,15 +84,16 @@ will check the repositories and the code to verify your answers.
 * [x] Get your model training in GCP using either the Engine or Vertex AI (M21)
 * [x] Create a FastAPI application that can do inference using your model (M22)
 * [x] Deploy your model in GCP using either Functions or Run as the backend (M23)
-* [ ] Write API tests for your application and setup continues integration for these (M24)
-* [ ] Load test your application (M24)
-* [ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
+* [x] Write API tests for your application and setup continues integration for these (M24)
+* [x] Load test your application (M24)
+* [x] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
 * [x] Create a frontend for your API (M26)
 
 ### Week 3
 
-* [ ] Check how robust your model is towards data drifting (M27)
-* [ ] Deploy to the cloud a drift detection API (M27)
+* [x] Check how robust your model is towards data drifting (M27)
+* [x] Deploy to the cloud a drift detection API (M27)
+* [x] Setup collection of input-output data from your deployed application (M27)
 * [ ] Instrument your API with a couple of system metrics (M28)
 * [ ] Setup cloud monitoring of your instrumented application (M28)
 * [ ] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
@@ -177,7 +178,9 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 5 fill here ---
+>From the cookiecutter template we have filled out the ... , ... and ... folder. We have removed the ... folder*
+>because we did not use any ... in our project. We have added an ... folder that contains ... for running our*
+>experiments.*
 
 ### Question 6
 
@@ -206,10 +209,14 @@ will check the repositories and the code to verify your answers.
 > Recommended answer length: 50-100 words.
 >
 > Example:
-> *In total we have implemented X tests. Primarily we are testing ... and ... as these the most critical parts of our*
-> *application but also ... .*
+> *In total we have implemented 3 tests for data and 4 tests for model training. Primarily we are testing the loading, processing and behaviour
+> of the classes used to transform the data into a valid input for our models. Apart from that, 
+>
 >
 > Answer:
+> In total we have implemented X tests. Primarily we are testing ... and ... as these the most critical parts of our*
+> application but also ... .*
+>
 
 --- question 7 fill here ---
 
