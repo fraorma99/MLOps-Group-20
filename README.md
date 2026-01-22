@@ -43,6 +43,7 @@ MLOps-Group-20/
 │   └── raw.dvc              # DVC data pointer
 ├── dockerfiles/             # Container recipes
 │   ├── api.dockerfile
+│   ├── drift_api.dockerfile
 │   └── train.dockerfile
 ├── docs/                    # Technical documentation
 │   ├── mkdocs.yml
@@ -54,11 +55,17 @@ MLOps-Group-20/
 ├── models/                  # Model artifacts
 │   ├── best_model.pt
 │   └── training_history.pt
+├── monitoring/
+│   ├── data_drifting.py/ 
 ├── multirun/                # Hydra multirun logs
 ├── notebooks/               # Exploratory Jupyter notebooks
+├── onnx/                    # Create and test onnx model API
+│   ├── export_onnx.py
+│   └── test_onnx.py
 ├── outputs/                 # Hydra run logs
 ├── reports/                 # Compliance and Cloud reports
 │   ├── reports.py
+│   ├── data_drifting/
 │   ├── README.md
 │   └── figures/             # GCP and WandB screenshots
 │       ├── bucket.png, build.png, overview.png, registry.png
@@ -69,12 +76,18 @@ MLOps-Group-20/
 ├── src/mlops_group_20/      # Main Python package
 │   ├── __init__.py
 │   ├── api.py
+│   ├── api_onnx.py
 │   ├── data.py
+│   ├── drift_api.py
 │   ├── evaluate.py
 │   ├── model.py
 │   ├── train.py
 │   └── visualize.py
 ├── tests/                   # Testing suite (Pytest)
+│   ├── integrationtests/    # Tests original API
+│       ├── tests_apis.py
+│   ├── performancetests/    # Tests original API
+│       ├── locusfile.py
 │   ├── __init__.py
 │   ├── test_api.py
 │   ├── test_data.py
@@ -94,7 +107,11 @@ MLOps-Group-20/
 ├── cloudbuild.yaml          # GCP build pipeline
 ├── docker-compose.yml       # Service orchestration
 ├── profile.prof             # Training profile data
+├── prometheus/              # Prometheus database and storage files
+├── prometheus.single.yml    # Simplified Prometheus config for single-service testing
+├── prometheus.yml           # Main Prometheus configuration (scrape jobs and targets)
 ├── pyproject.toml           # Project dependencies (UV)
+├── report_dynamo_export.sarif # SARIF report for PyTorch Dynamo ONNX export analysis
 ├── tasks.py                 # Project task runner
 └── uv.lock                  # Deterministic dependency lock
 ```
