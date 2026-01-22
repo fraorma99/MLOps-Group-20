@@ -168,14 +168,17 @@ def ui():
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Language Detector</title>
         <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+            
             * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
             }
             body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                color: #333;
                 min-height: 100vh;
                 display: flex;
                 justify-content: center;
@@ -183,96 +186,108 @@ def ui():
                 padding: 20px;
             }
             .container {
-                background: white;
-                border-radius: 20px;
+                background: #ffffff;
+                border: 1px solid #e1e5e9;
                 padding: 40px;
-                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
                 max-width: 600px;
                 width: 100%;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             }
             h1 {
-                color: #333;
+                font-family: 'Inter', sans-serif;
+                font-weight: 700;
+                color: #4a5568;
                 text-align: center;
                 margin-bottom: 10px;
-                font-size: 2em;
+                font-size: 2.5em;
+                letter-spacing: -0.02em;
             }
             .subtitle {
                 text-align: center;
-                color: #666;
+                color: #718096;
                 margin-bottom: 30px;
-                font-size: 0.95em;
+                font-size: 1.1em;
+                font-weight: 400;
             }
             textarea {
                 width: 100%;
-                padding: 15px;
-                border: 2px solid #e0e0e0;
-                border-radius: 10px;
+                padding: 16px;
+                border: 2px solid #e2e8f0;
+                background: #fafbff;
+                color: #2d3748;
                 font-size: 16px;
+                font-family: inherit;
                 resize: vertical;
                 min-height: 150px;
-                font-family: inherit;
-                transition: border-color 0.3s;
+                transition: all 0.2s;
+                border-radius: 0;
             }
             textarea:focus {
                 outline: none;
                 border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
             }
             button {
                 width: 100%;
-                padding: 15px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                border: none;
-                border-radius: 10px;
+                padding: 16px;
+                background: #edf2f7;
+                color: #4a5568;
+                border: 2px solid #e2e8f0;
                 font-size: 16px;
                 font-weight: 600;
+                font-family: inherit;
                 cursor: pointer;
                 margin-top: 20px;
-                transition: transform 0.2s, box-shadow 0.2s;
+                transition: all 0.2s;
+                border-radius: 0;
             }
             button:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+                background: #e6fffa;
+                border-color: #38b2ac;
+                color: #285e61;
             }
             button:active {
-                transform: translateY(0);
+                background: #c7f3e9;
             }
             button:disabled {
                 opacity: 0.6;
                 cursor: not-allowed;
-                transform: none;
+                background: #f7fafc;
             }
             .result {
                 margin-top: 20px;
-                padding: 20px;
-                background: #f8f9fa;
-                border-radius: 10px;
+                padding: 24px;
+                background: #f0fff4;
+                border: 2px solid #c6f6d5;
                 text-align: center;
                 display: none;
             }
             .result.show {
                 display: block;
-                animation: fadeIn 0.5s;
+                animation: fadeIn 0.3s;
             }
             @keyframes fadeIn {
                 from { opacity: 0; transform: translateY(10px); }
                 to { opacity: 1; transform: translateY(0); }
             }
             .language {
-                font-size: 2em;
-                font-weight: bold;
-                color: #667eea;
-                margin-bottom: 5px;
+                font-size: 2.8em;
+                font-weight: 700;
+                color: #22543d;
+                margin-bottom: 8px;
+                font-family: 'Inter', sans-serif;
+                letter-spacing: -0.03em;
             }
             .confidence {
-                color: #666;
-                font-size: 0.9em;
+                color: #4a5568;
+                font-size: 1.1em;
+                font-weight: 500;
             }
             .error {
-                background: #fee;
-                color: #c33;
-                padding: 15px;
-                border-radius: 10px;
+                background: #fed7d7;
+                color: #742a2a;
+                border: 2px solid #fc8181;
+                padding: 16px;
                 margin-top: 20px;
                 display: none;
             }
@@ -280,23 +295,23 @@ def ui():
                 display: block;
             }
             .example {
-                color: #999;
-                font-size: 0.85em;
-                margin-top: 10px;
+                color: #a0aec0;
+                font-size: 0.95em;
+                margin-top: 12px;
                 text-align: center;
+                font-style: italic;
             }
             .languages {
                 margin-top: 20px;
-                padding: 15px;
-                background: #f0f4ff;
-                border-radius: 10px;
-                border-left: 4px solid #667eea;
+                padding: 16px;
+                background: #ebf8ff;
+                border: 2px solid #bee3f8;
             }
             .languages-title {
                 font-weight: 600;
-                color: #333;
-                margin-bottom: 10px;
-                font-size: 0.9em;
+                color: #2b6cb0;
+                margin-bottom: 12px;
+                font-size: 1em;
             }
             .languages-list {
                 display: flex;
@@ -304,25 +319,25 @@ def ui():
                 gap: 8px;
             }
             .language-tag {
-                background: white;
-                color: #667eea;
-                padding: 6px 12px;
-                border-radius: 20px;
-                font-size: 0.85em;
-                border: 1px solid #667eea;
+                background: #ffffff;
+                color: #2c5282;
+                padding: 8px 14px;
+                border: 1px solid #bee3f8;
+                font-size: 0.9em;
+                font-weight: 500;
             }
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>🌍 Language Detector</h1>
+            <h1>Language Detector</h1>
             <p class="subtitle">Enter text below to detect its language</p>
             
             <textarea id="textInput" placeholder="Type or paste any text here..."></textarea>
             <p class="example">Try: "Hello, how are you?" or "Bonjour, comment allez-vous?"</p>
             
             <div class="languages">
-                <div class="languages-title">✨ Supported Languages:</div>
+                <div class="languages-title">Supported Languages:</div>
                 <div class="languages-list" id="languagesList">Loading...</div>
             </div>
             
@@ -337,7 +352,6 @@ def ui():
         </div>
 
         <script>
-            // Load supported languages on page load
             async function loadLanguages() {
                 try {
                     const response = await fetch('/languages');
@@ -350,11 +364,10 @@ def ui():
                     ).join('');
                 } catch (error) {
                     console.error('Failed to load languages:', error);
-                    document.getElementById('languagesList').textContent = 'Failed to load languages';
+                    document.getElementById('languagesList').textContent = 'Failed to load';
                 }
             }
             
-            // Load languages when page loads
             window.addEventListener('load', loadLanguages);
             
             async function detectLanguage() {
@@ -363,12 +376,11 @@ def ui():
                 const errorDiv = document.getElementById('error');
                 const button = document.querySelector('button');
                 
-                // Hide previous results
                 resultDiv.classList.remove('show');
                 errorDiv.classList.remove('show');
                 
                 if (!text) {
-                    errorDiv.textContent = 'Please enter some text first!';
+                    errorDiv.textContent = 'Please enter some text first.';
                     errorDiv.classList.add('show');
                     return;
                 }
@@ -386,7 +398,7 @@ def ui():
                     });
                     
                     if (!response.ok) {
-                        throw new Error('Failed to detect language');
+                        throw new Error('Detection failed');
                     }
                     
                     const data = await response.json();
@@ -405,7 +417,6 @@ def ui():
                 }
             }
             
-            // Allow Enter key to submit (with Shift+Enter for new line)
             document.getElementById('textInput').addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -417,6 +428,8 @@ def ui():
     </html>
     """
     return HTMLResponse(content=html_content)
+
+
 
 # Expose Prometheus metrics endpoint when enabled
 if ENABLE_METRICS:
