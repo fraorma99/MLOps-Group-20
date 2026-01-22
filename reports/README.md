@@ -178,11 +178,11 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
-Our project adheres to the provided cookiecutter template, ensuring a professional MLOps lifecycle. We populated the src/mlops_group_20/ directory with our core logic, implementing data processing in data.py, model architecture in model.py, and the training loop in train.py. The data/ folder was organized into raw/ and processed/ subdirectories, managed via DVC for version control.
+---Our project adheres to the provided cookiecutter template, ensuring a professional MLOps lifecycle. We populated the src/mlops_group_20/ directory with our core logic, implementing data processing in data.py, model architecture in model.py, and the training loop in train.py. The data/ folder was organized into raw/ and processed/ subdirectories, managed via DVC for version control.
 
 We fully utilized the configs/ folder for Hydra configurations and hyperparameter sweeps. Model artifacts, including best_model.pt, are stored in models/. For deployment and monitoring, we filled out the dockerfiles/ folder with specialized recipes for the API and training services.
 
-We deviated slightly from the base template by consolidating service orchestration into a docker-compose.yml file, which allows us to manage both the FastAPI application and the Prometheus monitoring stack simultaneously. Furthermore, we adopted uv as our primary package manager, resulting in the inclusion of uv.lock and pyproject.toml for deterministic dependency management. Our standard operational workflow involves docker login, followed by docker compose pull and docker compose up to seamlessly launch the API on port 8000 and Prometheus on port 9090.
+We deviated slightly from the base template by consolidating service orchestration into a docker-compose.yml file, which allows us to manage both the FastAPI application and the Prometheus monitoring stack simultaneously. Furthermore, we adopted uv as our primary package manager, resulting in the inclusion of uv.lock and pyproject.toml for deterministic dependency management. Our standard operational workflow involves docker login, followed by docker compose pull and docker compose up to seamlessly launch the API on port 8000 and Prometheus on port 9090.---
 
 ### Question 6
 
@@ -197,9 +197,9 @@ We deviated slightly from the base template by consolidating service orchestrati
 >
 > Answer:
 
-To ensure a professional and maintainable codebase, we adopted PEP8 as our primary style guide. Compliance is enforced through Ruff, a high-performance d formatter that we integrated into our environment management via uv. This setup ensures that every script, from data processing in data.py to our FastAPI implementation in api.py, is automatically checked for consistency and style during the container build process. Additionally, we utilized MkDocs (configured in docs/mkdocs.yml) to maintain technical documentation, providing a clear roadmap for project deployment and monitoring.
+---To ensure a professional and maintainable codebase, we adopted PEP8 as our primary style guide. Compliance is enforced through Ruff, a high-performance d formatter that we integrated into our environment management via uv. This setup ensures that every script, from data processing in data.py to our FastAPI implementation in api.py, is automatically checked for consistency and style during the container build process. Additionally, we utilized MkDocs (configured in docs/mkdocs.yml) to maintain technical documentation, providing a clear roadmap for project deployment and monitoring.
 
-In our project, these concepts mattered because they drastically reduced the time spent on manual debugging. For example, having standardized formatting meant we didn't waste time in code reviews discussing style; instead, we focused on model logic and deployment issues. Documentation was useful because it allowed us to replicate the complex monitoring setup on different machines without starting from scratch. Ultimately, these quality rules acted as a "safety net" ensuring that as we added new features like Prometheus monitoring, the core training and inference logic remained stable and error free.
+In our project, these concepts mattered because they drastically reduced the time spent on manual debugging. For example, having standardized formatting meant we didn't waste time in code reviews discussing style; instead, we focused on model logic and deployment issues. Documentation was useful because it allowed us to replicate the complex monitoring setup on different machines without starting from scratch. Ultimately, these quality rules acted as a "safety net" ensuring that as we added new features like Prometheus monitoring, the core training and inference logic remained stable and error free.---
 
 ## Version control
 
@@ -252,11 +252,11 @@ In our project, these concepts mattered because they drastically reduced the tim
 >
 > Answer:
 
-We fully integrated branches and pull requests into our workflow to manage the project's complexity. Each major feature, such as the FastAPI implementation or the Prometheus monitoring setup, was developed on a feature branch separate from the main branch. This separation allowed us to test specific components, like the Docker orchestration, without affecting the stability of the core training pipeline.
+---We fully integrated branches and pull requests into our workflow to manage the project's complexity. Each major feature, such as the FastAPI implementation or the Prometheus monitoring setup, was developed on a feature branch separate from the main branch. This separation allowed us to test specific components, like the Docker orchestration, without affecting the stability of the core training pipeline.
 
 To merge code, we utilized Pull Requests (PRs), which served as a critical checkpoint for peer review. We configured GitHub Actions to automatically trigger linting and testing workflows whenever a PR was opened, ensuring that only code meeting our quality standards was integrated.
 
-In larger projects, these concepts are essential because they prevent "merge hell" and ensure that the main branch always contains a deployable version of the software. Branches allow multiple developers to work on isolated features simultaneously, while PRs facilitate knowledge sharing and catch bugs through collective code review before they reach production.
+In larger projects, these concepts are essential because they prevent "merge hell" and ensure that the main branch always contains a deployable version of the software. Branches allow multiple developers to work on isolated features simultaneously, while PRs facilitate knowledge sharing and catch bugs through collective code review before they reach production.---
 
 ### Question 10
 
