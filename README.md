@@ -93,7 +93,6 @@ MLOps-Group-20/
 │   ├── test_data.py
 │   └── test_model.py
 ├── wandb/                   # Local WandB cache
-│
 ├── .dockerignore            # Docker exclusion rules
 ├── .dvcignore               # DVC exclusion rules
 ├── .env.example             # Template for secrets
