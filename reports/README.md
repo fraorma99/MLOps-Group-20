@@ -559,7 +559,9 @@ For unit testing we used pytest with testclients and built a mock library so tha
 >
 > Answer:
 
---- question 28 fill here ---
+Beyond the basic deployment, we implemented an end-to-end monitoring and drift workflow. First, we evaluated how robust our language-detection model is under data drift by generating several shifted input scenarios (short texts, typos, emoji/URLs, and code-switching) and producing Evidently-based HTML reports plus summary metrics (accuracy/F1) to quantify performance changes across scenarios.
+Second, we set up input–output data collection from the deployed Cloud Run API: every prediction request is logged (timestamp, input text, predicted label, service/revision metadata) and stored in a Cloud Storage bucket under a structured prefix (by service and day).
+Finally, we deployed a separate drift monitoring API on Cloud Run. This service reads recent inference logs from the bucket, compares them against a reference dataset, generates drift reports (HTML), and writes the reports back to Cloud Storage. This adds continuous, cloud-native observability to our ML system and makes drift analysis reproducible and automated.
 
 ### Question 29
 
