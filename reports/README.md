@@ -94,7 +94,7 @@ will check the repositories and the code to verify your answers.
 * [x] Check how robust your model is towards data drifting (M27)
 * [x] Deploy to the cloud a drift detection API (M27)
 * [x] Setup collection of input-output data from your deployed application (M27)
-* [ ] Instrument your API with a couple of system metrics (M28)
+* [x] Instrument your API with a couple of system metrics (M28)
 * [ ] Setup cloud monitoring of your instrumented application (M28)
 * [ ] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
 * [ ] If applicable, optimize the performance of your data loading using distributed data loading (M29)
@@ -498,7 +498,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- We successfully implemented monitoring using Prometheus. Our monitoring system works as follows: (1) the FastAPI application exposes a /metrics endpoint that outputs Prometheus-formatted metrics including api_requests_total, api_request_latency_seconds, api_predictions_total, api_inference_latency_seconds, and api_input_text_length; (2) the Prometheus server running on port 9090 scrapes these metrics every 5 seconds from the API service; (3) Prometheus stores all metrics in a time-series database, allowing historical analysis; (4) users access the Prometheus dashboard to query and visualize metrics over time using PromQL. This monitoring setup helps us understand application behavior, detect performance degradation, identify prediction patterns by language, and spot potential issues like unusual latency spikes or request patterns. The time-series data enables long-term trend analysis and capacity planning, ensuring the application remains healthy and performant in production. ---
+--- We successfully implemented monitoring using Prometheus. Our monitoring system works as follows: (1) the FastAPI application exposes a /metrics endpoint that outputs Prometheus-formatted metrics including api_requests_total, api_request_latency_seconds, api_predictions_total, api_inference_latency_seconds, and api_input_text_length; and many other commands that can be found by clicking the search bar on localhost:9090 (2) the Prometheus server running on port 9090 scrapes these metrics every 5 seconds from the API service; (3) Prometheus stores all metrics in a time-series database, allowing historical analysis; (4) users access the Prometheus dashboard to query and visualize metrics over time using PromQL. This monitoring setup helps us understand application behavior, detect performance, identify prediction patterns by language, and spot potential issues like unusual latency spikes or request patterns.---
 
 ## Overall discussion of project
 
