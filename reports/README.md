@@ -220,12 +220,12 @@ In our project, these concepts mattered because they drastically reduced the tim
 > In total we have implemented X tests. Primarily we are testing ... and ... as these the most critical parts of our*
 > application but also ... .*
 >
-> Answer
-> In total we have implemented 3 tests for data and 4 tests for model training. Primarily we
-> are testing the loading, processing and behaviour of the classes to transform the data into a
-> correct input. Apart from that, in the model test, we confirm that the model is well
-> elaborated and returns a correct output and that this output is valid in terms of shape
-> content, type, etc.
+ Answer
+ In total we have implemented 3 tests for data and 4 tests for model training. Primarily we
+ are testing the loading, processing and behaviour of the classes to transform the data into a
+ correct input. Apart from that, in the model test, we confirm that the model is well
+ elaborated and returns a correct output and that this output is valid in terms of shape
+ content, type, etc.
 
 
 ### Question 8
@@ -239,13 +239,13 @@ In our project, these concepts mattered because they drastically reduced the tim
 > *The total code coverage of code is X%, which includes all our source code. We are far from 100% coverage of our **
 > *code and even if we were then...*
 >
-> Answer:
+ Answer:
 
-> The total code coverage is between 74 and 88%, which includes our data and model
-> definition, training and data. We are far from 100% coverage of our code and even if we
-> were then we would have a false sensation of quality, that do not reflect the reality. A
-> 100% coverage means that all lines in our code are run but does not evaluate if the output
-> produced is logic.
+ The total code coverage is between 74 and 88%, which includes our data and model
+ definition, training and data. We are far from 100% coverage of our code and even if we
+ were then we would have a false sensation of quality, that do not reflect the reality. A
+ 100% coverage means that all lines in our code are run but does not evaluate if the output
+ produced is logic.
 
 
 ### Question 9
