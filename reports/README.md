@@ -620,7 +620,7 @@ Transitioning to uv for dependency management also required a pivot in our workf
 
 ---
 
-We used a variety of generative AI tools particularly through copilot where the specific model is not specified and was set to auto. Copilot helped write our code and also debugged the terminal particularly in the implementation of the Docker images for the FastAPI + Prometheus integration. It also helped format and write some of the questions in this report. We got AI to fully generate our architecture image.
+We used a variety of generative AI tools particularly through copilot where the specific model is not specified and was set to auto. Copilot helped write our code and also debugged the terminal particularly in the implementation of the Docker images for the FastAPI + Prometheus integration. It also helped format and write some of the questions in this report.
 
 
 s253199 was the lead for the initial project architecture, responsible for initializing the repository using the cookiecutter MLOps template. This involved setting up the foundational directory structure, including the src/, configs/, and tests/ folders, to ensure the project followed industry standards for reproducibility. His main technical contribution was the development of the Language Detection API using FastAPI. He implemented the core inference endpoints, integrated the model loading logic, and ensured the API was well-documented through the built-in Swagger UI. Additionally, he contributed to the containerization and monitoring phase by assisting in the initial configuration of the Docker environment and the integration of the Prometheus instrumentation within the FastAPI code.
