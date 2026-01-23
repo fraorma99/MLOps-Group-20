@@ -436,6 +436,8 @@ Cloud Run: We used Cloud Run as a serverless container platform to do deploy and
 >
 > Answer:
 
+![art1](figures/art1.png)
+![art2](figures/art2.png)
 
 
 ### Question 21
@@ -445,7 +447,7 @@ Cloud Run: We used Cloud Run as a serverless container platform to do deploy and
 >
 > Answer:
 
---- question 21 fill here ---
+![cbuild](figures/cbuild.png)
 
 ### Question 22
 
@@ -544,8 +546,9 @@ For unit testing we used pytest with testclients and built a mock library so tha
 >
 > Answer:
 
---- question 27 fill here ---
-
+According to the Billing "Reports" on Google Cloud, our total billed cost was $0.00, even though we generated a small usage cost that was fully offset by credits (about -$0.19). The largest cost driver in raw usage was Compute Engine ($0.16) followed by Cloud Run ($0.01) and Networking ($0.01), while Cloud Storage, Artifact Registry, Cloud Logging and Cloud Build were negligible.
+Overall, working on the cloud was convenient and reproducible. Deployments were consistent, scaling was handled automatically,and monitoring/logging made debugging easier compared to running everythinh locally.
+Also the usage of other services like Compute Engine, Cloude Storage (for DVC) and Cloud Build + Artifact Registry let us rin training and builds in a clean, consistent environment instead of relying on local machines. It also improved collaboration since data and Docker images were stored there and could be reused by the whole team.
 ### Question 28
 
 > **Did you implement anything extra in your project that is not covered by other questions? Maybe you implemented**
@@ -579,7 +582,7 @@ Finally, we deployed a separate drift monitoring API on Cloud Run. This service 
 >
 > Answer:
 
---- Our diagram: ![arch](figures/architecture.png) The starting point of the project is creating the github on cookiecutter template and sharing the project with collaborators. The next step is the local development where we import data, process it, train the model, evaluate it and run unit tests. There are two splits from this point, the first is the DVC,  . The second is making sure the Docker images are created with multiplatform support using the buildx container for Docker. From this one can pull the image and docker compose up and test the results of the project on localhost. Additionally, the prometheus reads the outputs and inputs of the API and shows interesting metrics. ---
+--- Our diagram: ![arch](figures/architecture.png) The starting point of the project is creating the github on cookiecutter template and sharing the project with collaborators. The next step is the local development where we import data, process it, train the model, evaluate it and run unit tests. To keep the project stable across contributions, we set up GitHub Actions CI to automatically run tests on push/PR, using a matrix across operating systems and Python versions and catching with uv for faster runs. From this point there are two main extensions, first we use DVC to connect it to Google Cloud Storage buckets so data artifacts are versioned and shared without commiting raw data to GitHub and we automate Docker image builds by using Cloud Build triggers that build and push our train and api images to Artifact Registry. The second is making sure the Docker images are created with multiplatform support using the buildx container for Docker. From this one can pull the image and docker compose up and test the results of the project on localhost. Additionally, we validated cloud training using a Compute Engine VM, and prometheus reads the outputs and inputs of the API and shows interesting metrics. For monitoring we evaluated robustness to drift-like perturbations and generated Evidently reports and summary metrics. We also set up inpit-output logging from the deployed API to a Cloud Storage bucket, and deployed a separate drift monitoring API on Cloud Run that reads the stored inferene logs, compares them to a reference dataset, generates drift reports and uploads them back to the bucket.
 
 ### Question 30
 
@@ -622,7 +625,7 @@ We used a variety of generative AI tools particularly through copilot where the 
 
 s253199 was the lead for the initial project architecture, responsible for initializing the repository using the cookiecutter MLOps template. This involved setting up the foundational directory structure, including the src/, configs/, and tests/ folders, to ensure the project followed industry standards for reproducibility. His main technical contribution was the development of the Language Detection API using FastAPI. He implemented the core inference endpoints, integrated the model loading logic, and ensured the API was well-documented through the built-in Swagger UI. Additionally, he contributed to the containerization and monitoring phase by assisting in the initial configuration of the Docker environment and the integration of the Prometheus instrumentation within the FastAPI code.
 
-s253248 was...
+s253248 worked mainly for the Cloud infrastructure, configuring DVC with Google Cloud Storage bucket as the remote, and creating automated Docker build/push workflows to Artifact Registry. Also a GitHub Actions CI was implemented as well. Additionally worked on the deployment of our FastAPI services on Cloud Run and Cloud Storage logging for input-output collection and drift reports, and validated training of our model using Compute Engine.
 
 
 s253268 worked on testing the model and training part of the project and completed the code coverage part. Apart from that, he created the workflows and pre-commit part, tested the API and created a new specialized model with ONNX with its own API based on the best original model.
