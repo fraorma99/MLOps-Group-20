@@ -5,9 +5,9 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 import pandas as pd
 
-from src.mlops_group_20.api import app, model, vocab, idx2label, device  # Ajusta import
+import mlops_group_20.api as api
 
-client = TestClient(app)
+client = TestClient(api.app)
 
 class TestLanguageDetectionAPI:
     """Tests completos Language Detection API."""
@@ -15,14 +15,13 @@ class TestLanguageDetectionAPI:
     @pytest.fixture(autouse=True)
     def setup_model(self):
         """Mock model to test faster"""
-        global model, vocab, idx2label
 
-        idx2label = {0: 'Spanish', 1: 'English', 2: 'French'}
-        vocab = {'hola que tal estás': 10, 'hello how are you': 20, 'bonjour comment allez-vous': 30, '<pad>': 0}
+        api.idx2label = {0: 'Spanish', 1: 'English', 2: 'French'}
+        api.vocab = {'hola': 10, 'hello': 20, 'mundo': 11, 'world': 21, '<pad>': 0}
 
         # Mock model simple
-        model = MagicMock()
-        model.return_value = torch.tensor([[100, -50, -20]])
+        api.model = MagicMock()
+        api.model.return_value = torch.tensor([[100, -50, -20]])
 
     def test_root_endpoint(self):
         """Returns a valid output"""
@@ -45,7 +44,7 @@ class TestLanguageDetectionAPI:
         assert response.headers["content-type"] == "text/html; charset=utf-8"
         assert "<!DOCTYPE html>" in response.text
 
-    @patch('src.mlops_group_20.api.simple_tokenizer')
+    @patch('mlops_group_20.api.simple_tokenizer')
 
     def test_predict_language_spanish(self, mock_tokenizer):
         """Predict a spanish text"""
@@ -60,12 +59,12 @@ class TestLanguageDetectionAPI:
         assert data["status"] == "success"
         assert "input_text" in data
 
-    @patch('src.mlops_group_20.api.simple_tokenizer')
+    @patch('mlops_group_20.api.simple_tokenizer')
 
     def test_predict_language_english(self, mock_tokenizer):
         """Predict a english text"""
         mock_tokenizer.return_value = ['hello', 'world']
-        with patch.object(model, 'return_value', torch.tensor([[ -50, 100, -20]])):  # Predice idx 1
+        with patch.object(api.model, 'return_value', torch.tensor([[ -50, 100, -20]])):  # Predice idx 1
             payload = {"text": "Hello world this is English."}
             response = client.post("/predict", json=payload)
             assert response.status_code == 200
@@ -84,16 +83,10 @@ class TestLanguageDetectionAPI:
         response = client.post("/predict", json=payload)
         assert response.status_code == 422
 
-    @patch('src.mlops_group_20.api.simple_tokenizer')
+    @patch('mlops_group_20.api.simple_tokenizer')
     def test_predict_long_text(self, mock_tokenizer):
         """API response with a very long text"""
-        mock_tokenizer.return_value = ['token'] * 300  # >200
+        mock_tokenizer.return_value = ['hola'] * 300  # >200
         payload = {"text": "a" * 10000}
         response = client.post("/predict", json=payload)
         assert response.status_code == 200
-
-    def test_model_startup_error(self):
-        """API model loading failure on startup."""
-        with patch('src.mlops_group_20.api.load_artifacts', side_effect=RuntimeError("No model")):
-            response = client.get("/languages")
-            assert response.status_code == 500

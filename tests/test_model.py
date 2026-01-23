@@ -180,16 +180,7 @@ class DummyCfg:
 
 
 def test_train_smoke_one_epoch(monkeypatch, tmp_path):
-    """
-    Smoke test: verify that train(cfg) can run one epoch without errors.
 
-    Important:
-    - This test does NOT touch LanguageDataset or TextDataset directly,
-      those are already tested in test_data.py.
-    - It builds a tiny DataFrame with columns 'Text' and 'Language'.
-    - It monkeypatches pandas.read_pickle inside train_module so that
-      train() reads our in-memory DataFrame instead of a real file.
-    """
     import pandas as pd
 
     # Small in-memory dataset, similar to what train.py expects.

@@ -112,6 +112,7 @@ def load_artifacts():
 
         if not label_mappings_path.exists():
             raise FileNotFoundError(f"Label mappings not found at {label_mappings_path}")
+
         if not vocab_path.exists():
             raise FileNotFoundError(f"Vocabulary not found at {vocab_path}")
 
@@ -169,7 +170,7 @@ if ENABLE_METRICS:
 
 @app.get("/")
 def root():
-    return {"message": "Language Detection API is running. Use /predict to detect language."}
+    return {"message": "Language Detection API is running."}
 
 @app.get("/languages")
 def get_languages():
